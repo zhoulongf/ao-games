@@ -20,6 +20,12 @@ const router = new Router({
           name: "home",
           component: () =>
               import ( /* webpackChunkName: "Home" */ "../views/home.vue")
+      },
+      {
+          path: "/rank",
+          name: "rank",
+          component: () =>
+              import ( /* webpackChunkName: "Home" */ "../views/rank.vue")
       }
     ]
 });

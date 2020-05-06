@@ -33,11 +33,6 @@ export default {
 </script>
 <style lang="scss">
 .header-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 99;
   font-size: 16px;
   padding: 16px 10px;
   display: flex;

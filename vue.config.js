@@ -6,6 +6,7 @@ const pxtorem = require("postcss-pxtorem");
 module.exports = {
     // publicPath,
     productionSourceMap: false,
+    lintOnSave: false, //关闭eslint规范
     configureWebpack() {
         return {
             resolve: {

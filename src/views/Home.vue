@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <my-header :headerInfo="headerInfo"></my-header>
     <div class="home-content">
       <div class="home-content-top">
         <div class="imgSrc"></div>
@@ -8,7 +7,7 @@
         <div class="infoNub info-right">老司机</div>
       </div>
       <div class="list">
-        <img v-for="(item,index) in list" :key="index" :src="item" alt="暂无图片">
+        <img v-for="(item,index) in list" :key="index" :src="item" alt="暂无图片" @click="goTo(item,index)">
       </div>
       <div class="content-img"></div>
       <div class="btn-submit"></div>
@@ -25,27 +24,32 @@ export default {
   },
   data(){
     return {
-      headerInfo: {
-        title: "小游戏"
-      },
       list:[require('../assets/img/ph.png'),require('../assets/img/tk.png'),require('../assets/img/gz.png')]
     }
+  },
+  methods:{
+     goTo(item,key){
+       if(key == 0){
+         this.$router.push({
+          path: "rank",
+          query: {
+            id: key
+          }
+        });
+       }
+     }
   }
 };
 </script>
 <style lang="scss" scoped>
 .home{
-  padding-top: 55px;
   &-content{
-    width: 100%;
-    height: calc(100vh - 55px);
-    background: url(../assets/img/homebg.jpg) no-repeat center center;
-    background-size: cover;
     &-top{
       width: 92%;
-      height: 120px;
+      height: 100px;
       margin: 0px auto;
-      background: url(../assets/img/homeinfo.png) no-repeat center center;
+      margin-top: 20px;
+      background: url(../assets/img/homeinfo.jpg) no-repeat center center;
       background-size: contain;
       position: relative;
       .imgSrc{
@@ -54,7 +58,7 @@ export default {
         height: 60px;
         background: #ff0;
         border-radius: 50%;
-        top: 10px;
+        top: -15px;
         left: 50%;
         transform: translateX(-50%);
       }
@@ -64,7 +68,7 @@ export default {
         font-size: 18px;
         font-weight: 400;
         font-style: italic;
-        top: 78px;
+        top: 50px;
         &.info-left{
           left: 15%;
         }
@@ -75,7 +79,7 @@ export default {
     }
     .list{
       width: 92%;
-      margin: 10px auto;
+      margin: 0 auto;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -88,7 +92,7 @@ export default {
     .content-img{
       width: 92%;
       height: 350px;
-      margin: 0 auto;
+      margin: 10px auto;
       background: #fff;
     }
     .btn-submit{
