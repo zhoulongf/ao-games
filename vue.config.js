@@ -46,7 +46,7 @@ module.exports = {
                 plugins: [
                     autoprefixer(),
                     pxtorem({
-                        rootValue: 50,
+                        rootValue: 100,
                         // propList: ['*', '!font-size'],
                         propList: ["*"]
                             // 该项仅在使用 Circle 组件时需要
