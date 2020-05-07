@@ -7,7 +7,13 @@
         <div class="infoNub info-right">老司机</div>
       </div>
       <div class="list">
-        <img v-for="(item,index) in list" :key="index" :src="item" alt="暂无图片" @click="goTo(item,index)">
+        <img
+          v-for="(item,index) in list"
+          :key="index"
+          :src="item"
+          alt="暂无图片"
+          @click="goTo(item,index)"
+        />
       </div>
       <div class="content-img"></div>
       <div class="btn-submit"></div>
@@ -16,35 +22,49 @@
 </template>
 
 <script>
+import Vue from "vue";
+import { Dialog } from "vant";
+Vue.use(Dialog);
 import MyHeader from "@/components/my-header";
 export default {
   name: "Home",
   components: {
     MyHeader
   },
-  data(){
+  data() {
     return {
-      list:[require('../assets/img/ph.png'),require('../assets/img/tk.png'),require('../assets/img/gz.png')]
-    }
+      list: [
+        require("../assets/img/ph.png"),
+        require("../assets/img/tk.png"),
+        require("../assets/img/gz.png")
+      ]
+    };
   },
-  methods:{
-     goTo(item,key){
-       if(key == 0){
-         this.$router.push({
+  methods: {
+    goTo(item, key) {
+      if (key == 0) {
+        this.$router.push({
           path: "rank",
           query: {
             id: key
           }
         });
-       }
-     }
+      } else if (key == 2) {
+        Dialog.alert({
+          title: "游戏规则",
+          message: "后台返给我们"
+        }).then(() => {
+          // on close
+        });
+      }
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
-.home{
-  &-content{
-    &-top{
+.home {
+  &-content {
+    &-top {
       width: 92%;
       height: 100px;
       margin: 0px auto;
@@ -52,7 +72,7 @@ export default {
       background: url(../assets/img/homeinfo.jpg) no-repeat center center;
       background-size: contain;
       position: relative;
-      .imgSrc{
+      .imgSrc {
         position: absolute;
         width: 60px;
         height: 60px;
@@ -62,40 +82,40 @@ export default {
         left: 50%;
         transform: translateX(-50%);
       }
-      .infoNub{
+      .infoNub {
         position: absolute;
-        color: #2782AE;
+        color: #2782ae;
         font-size: 18px;
         font-weight: 400;
         font-style: italic;
         top: 50px;
-        &.info-left{
+        &.info-left {
           left: 15%;
         }
-        &.info-right{
+        &.info-right {
           right: 15%;
         }
       }
     }
-    .list{
+    .list {
       width: 92%;
       margin: 0 auto;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      img{
+      img {
         width: 25%;
         height: 30px;
         cursor: pointer;
       }
     }
-    .content-img{
+    .content-img {
       width: 92%;
       height: 350px;
       margin: 10px auto;
       background: #fff;
     }
-    .btn-submit{
+    .btn-submit {
       width: 42%;
       height: 50px;
       margin: 0 auto;

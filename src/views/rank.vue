@@ -46,20 +46,29 @@
     <div class="rank-bottom">
       <p class="rank-top span1">进入排行榜前N名，可获取影票N张</p>
       <div class="foot-bottom">
-        <span class="span0">游戏规则</span>
+        <span class="span0" @click="gzclick">游戏规则</span>
         <span class="span0">获奖记录</span>
       </div>
     </div>
     <div class="rigtFix"></div>
+    <van-dialog v-model="gzshow" title="游戏规则">
+      <div class="gz-dialog">
+        日排行、周排行、总排行，分别读取后台配置的相应的游戏规则
+      </div>
+    </van-dialog>
   </div>
 </template>
 <script>
+import Vue from "vue";
+import { Dialog } from "vant";
+Vue.use(Dialog);
 import MyHeader from "@/components/my-header";
 export default {
   name: "rank",
   data() {
     return {
       activeIndex: 0,
+      gzshow:false,
       list: [
         {
           name: "山鸡炖蘑菇",
@@ -97,6 +106,9 @@ export default {
   methods: {
     phClick(item, index) {
       this.activeIndex = index;
+    },
+    gzclick(){
+      this.gzshow=true
     }
   }
 };
@@ -281,6 +293,11 @@ export default {
     background: url(../assets/img/rankno.png) no-repeat center center;
     background-size: contain;
     cursor: pointer;
+  }
+  .gz-dialog{
+    width: 92%;
+    height: auto;
+    margin: 20px auto;
   }
 }
 </style>
