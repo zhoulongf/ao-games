@@ -16,13 +16,13 @@
       </div>
     </div>
     <van-dialog v-model="lookma" :showConfirmButton=false class="vantdia">
-      <div class="lookma-dialog">
+      <div class="lookma-dialog" :class="receive ? 'lookyes' : 'lookno'">
         <div class="close"><img src="../assets/img/x.png" @click="diaFalse"></div>
-        <div class="dialong-content">
+        <div class="dialong-content" v-if="receive">
           <p class="duih">兑换码 199999999</p>
           <p class="duih">兑换码 199999999</p>
-          <p class="title">到指定平台换取电影票</p>
-          <div class="fubtn"><img src="../assets/img/fubtn.png"></div>
+          <p class="title">（到指定平台换取电影票）</p>
+          <div class="fubtn"><img src="../assets/img/fubtn.png" @click="fuzhi"></div>
         </div>
       </div>
     </van-dialog>
@@ -30,13 +30,15 @@
 </template>
 <script>
 import Vue from "vue";
-import { Dialog } from "vant";
+import { Dialog,Toast } from "vant";
 Vue.use(Dialog);
+Vue.use(Toast);
 export default {
   name: "record",
   data() {
     return {
-      lookma:true,
+      lookma:false,
+      receive:true,
       list: [
         { time: "2020年5月7号", number: 2, status: 1 },
         { time: "2020年5月7号", number: 2, status: 2 },
@@ -58,15 +60,35 @@ export default {
     infoClick(item){
       if(item.status == 2){
         this.lookma=true
+        this.receive=true
+      }else if(item.status == 1){
+        this.lookma=true
+        this.receive=false
       }
     },
     diaFalse(){
       this.lookma=false
+    },
+    fuzhi(){
+      Toast({
+        className:"toastclass",
+        duration: 1000, 
+        icon: require('@/assets/img/fuzyes.png'),
+      });
+      // setInterval(() =>{
+      //   this.lookma=false
+      // },1001)
     }
   }
 };
 </script>
 <style lang="scss">
+.toastclass{
+  background-color: rgba(50,50,51,0);
+  .van-icon__image{
+    width: 100px;
+  }
+}
 .vantdia{
   background: #ccc;
 }
@@ -157,11 +179,17 @@ export default {
           margin-right: 10px;
       }
   }
+  .lookyes{
+    background: url(../assets/img/myrecordyes.png) no-repeat center center;
+    background-size: 100% 100%;
+  }
+  .lookno{
+    background: url(../assets/img/lookno.png) no-repeat center center;
+    background-size: 100% 100%;
+  }
   .lookma-dialog{
     height: calc(100vh - 240px);
     margin: 0 auto;
-    background: url(../assets/img/myrecordyes.png) no-repeat center center;
-    background-size: 100% 100%;
     .close{
       padding-right: 15px;
       height: 40px;
@@ -180,10 +208,14 @@ export default {
       margin-top: 150px;
       text-align: center;
       .duih{
+        height: 30px;
+        line-height: 30px;
         font-weight: 600;
         font-size: 16px;
       }
       .title{
+        height: 20px;
+        line-height: 20px;
         font-size: 12px;
         font-weight: 400;
         color: #BDBDBD;
@@ -192,6 +224,7 @@ export default {
         margin-top: 20px;
         img{
           height: 30px;
+          cursor: pointer;
         }
       }
     }
