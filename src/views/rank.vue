@@ -50,7 +50,7 @@
         <span class="span0" @click="goRecord">获奖记录</span>
       </div>
     </div>
-    <div class="rigtFix"></div>
+    <div class="rigtFix" @click="gomyRecord"></div>
     <van-dialog v-model="gzshow" title="游戏规则">
       <div class="gz-dialog">
         日排行、周排行、总排行，分别读取后台配置的相应的游戏规则
@@ -109,6 +109,14 @@ export default {
     goRecord(){
       this.$router.push({
           path: "record",
+          query: {
+            id: 1
+          }
+        });
+    },
+    gomyRecord(){
+      this.$router.push({
+          path: "myrecord",
           query: {
             id: 1
           }
@@ -277,13 +285,12 @@ export default {
   .rigtFix{
     position: fixed;
     width: 60px;
-    height: 30px;
-    height: 80px;
+    height: 40px;
     right: 0;
     top: 60%;
     transform: translateY(-50%);
     background: url(../assets/img/rankno.png) no-repeat center center;
-    background-size: contain;
+    background-size: 100% 100%;
     cursor: pointer;
   }
   .gz-dialog{

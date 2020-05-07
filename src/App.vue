@@ -44,6 +44,6 @@ body {
 .content{
   flex: 1;
   background: url(./assets/img/homebg.jpg) no-repeat center center;
-  background-size: cover;
+  background-size: 100% 100%;
 }
 </style>

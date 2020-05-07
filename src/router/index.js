@@ -32,6 +32,12 @@ const router = new Router({
           name: "record",
           component: () =>
               import ( /* webpackChunkName: "Home" */ "../views/record.vue")
+      },
+      {
+          path: "/myrecord",
+          name: "myrecord",
+          component: () =>
+              import ( /* webpackChunkName: "Home" */ "../views/myrecord.vue")
       }
     ]
 });
