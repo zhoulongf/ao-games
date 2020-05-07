@@ -47,7 +47,7 @@
       <p class="rank-top span1">进入排行榜前N名，可获取影票N张</p>
       <div class="foot-bottom">
         <span class="span0" @click="gzclick">游戏规则</span>
-        <span class="span0">获奖记录</span>
+        <span class="span0" @click="goRecord">获奖记录</span>
       </div>
     </div>
     <div class="rigtFix"></div>
@@ -62,7 +62,6 @@
 import Vue from "vue";
 import { Dialog } from "vant";
 Vue.use(Dialog);
-import MyHeader from "@/components/my-header";
 export default {
   name: "rank",
   data() {
@@ -106,6 +105,14 @@ export default {
   methods: {
     phClick(item, index) {
       this.activeIndex = index;
+    },
+    goRecord(){
+      this.$router.push({
+          path: "record",
+          query: {
+            id: 1
+          }
+        });
     },
     gzclick(){
       this.gzshow=true
