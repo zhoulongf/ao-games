@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <my-header :headerInfo="headerInfo"></my-header>
+    <!-- <my-header :headerInfo="headerInfo"></my-header> -->
     <div class="content">
       <router-view />
     </div>

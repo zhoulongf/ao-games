@@ -131,10 +131,10 @@ export default {
 <style lang="scss" scoped>
 .rank {
   width: 92%;
-  height: calc(100vh - 115px);
+  height: calc(100vh - 55px);
   margin: 30px auto;
   background: url(../assets/img/rankbg.png) no-repeat center center;
-  background-size: cover;
+  background-size: 100% 100%;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -144,7 +144,7 @@ export default {
     justify-content: space-around;
     .rank-item {
       width: 33%;
-      height: 38px;
+      height: 34px;
       cursor: pointer;
       &.itemLast {
         width: 30%;
@@ -191,6 +191,7 @@ export default {
   &-infos {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     &-item {
       width: 92%;
       margin: 10px auto;
@@ -236,7 +237,7 @@ export default {
     width: 92%;
     height: 60px;
     justify-content: space-between;
-    margin: 20px auto;
+    margin: 5px auto;
     .info-left {
       width: 45%;
       height: 60px;

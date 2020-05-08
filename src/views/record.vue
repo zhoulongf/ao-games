@@ -116,7 +116,7 @@ export default {
       justify-content: space-around;
       .record-item {
         width: 50%;
-        height: 44px;
+        height: 38px;
         cursor: pointer;
         &.itemLast {
           width: 48%;
@@ -152,8 +152,9 @@ export default {
     &-infos {
       padding-right: 8px;
     //   margin-bottom: 10px;
-      height: calc(100vh - 255px);
+      height: calc(100vh - 200px);
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       position: relative;
       &-item {
         display: flex;
@@ -198,7 +199,7 @@ export default {
   .foot-bottom {
     width: 92%;
     margin: 0 auto;
-    height: 30px;
+    height: 36px;
     display: flex;
     justify-content: space-around;
     align-items: center;

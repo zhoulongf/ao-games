@@ -157,7 +157,7 @@ export default {
     }
     .content-img {
       width: 92%;
-      height: 350px;
+      height: calc(100vh - 255px);
       margin: 10px auto;
       background: #fff;
     }
@@ -165,13 +165,14 @@ export default {
       width: 40%;
       height: 50px;
       margin: 0 auto;
+      margin-top: 20px;
       background: url(../assets/img/dt.png) no-repeat center center;
       background-size: contain;
       cursor: pointer;
     }
   }
   .match-dialog {
-    height: calc(100vh - 180px);
+    height: calc(100vh - 120px);
     margin: 0 auto;
     background: url(../assets/img/matchbg.png) no-repeat center center;
     background-size: 100% 100%;
@@ -219,7 +220,7 @@ export default {
     .match-footer{
       position: absolute;
       left: 50%;
-      bottom: 50px;
+      bottom: 40px;
       transform: translateX(-50%);
       width: 40%;
       height: 40px;

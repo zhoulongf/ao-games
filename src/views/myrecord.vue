@@ -15,7 +15,7 @@
           <span class="span2">以上为全部内容</span>
       </div>
     </div>
-    <van-dialog v-model="lookma" :showConfirmButton=false class="vantdia">
+    <van-dialog v-model="lookma" :showConfirmButton=false class="vantdia" width="75%">
       <div class="lookma-dialog" :class="receive ? 'lookyes' : 'lookno'">
         <div class="close"><img src="../assets/img/x.png" @click="diaFalse"></div>
         <div class="dialong-content" v-if="receive">
@@ -90,13 +90,13 @@ export default {
   }
 }
 .vantdia{
-  background: #ccc;
+  background: rgba(0,0,0,.7);
 }
 </style>
 <style lang="scss" scoped>
 .myrecord {
   width: 92%;
-  height: calc(100vh - 135px);
+  height: calc(100vh - 75px);
   margin: 0 auto;
   margin-top: 40px;
   background: url(../assets/img/myrecordbg.png) no-repeat center center;
@@ -112,6 +112,7 @@ export default {
   &-list {
     height: 85%;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     &-item {
       margin-top: 10px;
       display: flex;
@@ -188,7 +189,7 @@ export default {
     background-size: 100% 100%;
   }
   .lookma-dialog{
-    height: calc(100vh - 240px);
+    height: calc(100vh - 220px);
     margin: 0 auto;
     .close{
       padding-right: 15px;
@@ -203,9 +204,8 @@ export default {
       }
     }
     .dialong-content{
-      width: 80%;
       margin: 0 auto;
-      margin-top: 150px;
+      margin-top: 35%;
       text-align: center;
       .duih{
         height: 30px;
