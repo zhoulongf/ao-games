@@ -16,8 +16,28 @@
         />
       </div>
       <div class="content-img"></div>
-      <div class="btn-submit"></div>
+      <div class="btn-submit" @click="beginTime"></div>
     </div>
+    <van-dialog v-model="matchshow" :showConfirmButton="false" class="vantdia">
+      <div class="match-dialog">
+        <div class="match-top">
+          <img src="../assets/img/fdj.png" />
+          <p class="span0">正在寻找对手({{number}})</p>
+        </div>
+        <div class="match-center">
+          <div class="match-center-left">
+            <img src="../assets/img/myrecordyes.png" />
+            <span class="span0">微信名称</span>
+          </div>
+          <div class="match-center-center">vs</div>
+          <div class="match-center-left">
+            <img src="../assets/img/myrecordyes.png" />
+            <span class="span0">微信名称</span>
+          </div>
+        </div>
+        <div class="match-footer" @click="closematch"></div>
+      </div>
+    </van-dialog>
   </div>
 </template>
 
@@ -33,6 +53,9 @@ export default {
   },
   data() {
     return {
+      matchshow: false,
+      number: 0,
+      timer: null,
       list: [
         require("../assets/img/ph.png"),
         require("../assets/img/tk.png"),
@@ -41,6 +64,10 @@ export default {
     };
   },
   methods: {
+    beginTime() {
+      this.matchshow = true;
+      this.timer = setInterval(this.goTime, 1000);
+    },
     goTo(item, key) {
       if (key == 0) {
         this.$router.push({
@@ -57,10 +84,29 @@ export default {
           // on close
         });
       }
+    },
+    goTime() {
+      this.number++;
+    },
+    clearTimer() {
+      clearInterval(this.timer);
+      this.number = 0;
+    },
+    closematch(){
+      this.clearTimer()
+      this.matchshow=false
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 };
 </script>
+<style lang="scss">
+.vantdia {
+  background: #ccc;
+}
+</style>
 <style lang="scss" scoped>
 .home {
   &-content {
@@ -120,6 +166,64 @@ export default {
       height: 50px;
       margin: 0 auto;
       background: url(../assets/img/dt.png) no-repeat center center;
+      background-size: contain;
+      cursor: pointer;
+    }
+  }
+  .match-dialog {
+    height: calc(100vh - 180px);
+    margin: 0 auto;
+    background: url(../assets/img/matchbg.png) no-repeat center center;
+    background-size: 100% 100%;
+    position: relative;
+    overflow: hidden;
+    .match-top {
+      width: 60%;
+      height: 40px;
+      margin: 40px auto;
+      background: url(../assets/img/ppbg.png) no-repeat center center;
+      background-size: 100% 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .match-center {
+      width: 80%;
+      margin: 0 auto;
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      &-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        img {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          margin-bottom: 10px;
+        }
+      }
+      &-center {
+        font-weight: 700;
+        font-size: 22px;
+        color: #fff;
+      }
+    }
+    .match-footer{
+      position: absolute;
+      left: 50%;
+      bottom: 50px;
+      transform: translateX(-50%);
+      width: 40%;
+      height: 40px;
+      background: url(../assets/img/nopp.png) no-repeat center center;
       background-size: contain;
       cursor: pointer;
     }
