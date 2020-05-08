@@ -11,8 +11,8 @@
     </div>
     <div class="rank-infos">
       <div class="rank-infos-item" v-for="(item,index) in list" :key="index">
-        <div class="item-left" :class="[index< 3 ? `left${++index}` : null]">
-          <span class="ative-item" v-if="index>2">{{index}}</span>
+        <div class="item-left" :class="[index< 3 ? `left${index}` : null]">
+          <span class="ative-item" v-if="index>2">{{++index}}</span>
         </div>
         <div class="item-center">
           <img src="../assets/img/rankdw.png" alt="暂无图片" />
