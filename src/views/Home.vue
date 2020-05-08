@@ -116,7 +116,7 @@ export default {
       background: #fff;
     }
     .btn-submit {
-      width: 42%;
+      width: 40%;
       height: 50px;
       margin: 0 auto;
       background: url(../assets/img/dt.png) no-repeat center center;

@@ -152,7 +152,7 @@ export default {
     &-infos {
       padding-right: 8px;
     //   margin-bottom: 10px;
-      height: calc(100vh - 235px);
+      height: calc(100vh - 255px);
       overflow-y: auto;
       position: relative;
       &-item {
