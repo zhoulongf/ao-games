@@ -76,6 +76,13 @@ export default {
             id: key
           }
         });
+      } else if (key == 1) {
+        this.$router.push({
+          path: "question",
+          query: {
+            id: key
+          }
+        });
       } else if (key == 2) {
         Dialog.alert({
           title: "游戏规则",
@@ -92,9 +99,9 @@ export default {
       clearInterval(this.timer);
       this.number = 0;
     },
-    closematch(){
-      this.clearTimer()
-      this.matchshow=false
+    closematch() {
+      this.clearTimer();
+      this.matchshow = false;
     }
   },
   beforeDestroy() {
@@ -217,7 +224,7 @@ export default {
         color: #fff;
       }
     }
-    .match-footer{
+    .match-footer {
       position: absolute;
       left: 50%;
       bottom: 40px;
