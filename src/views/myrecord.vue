@@ -30,9 +30,10 @@
 </template>
 <script>
 import Vue from "vue";
-import { Dialog,Toast } from "vant";
-Vue.use(Dialog);
-Vue.use(Toast);
+import { Dialog,Toast,Form } from "vant";
+Vue.use(Dialog)
+.use(Toast)
+.use(Form)
 export default {
   name: "record",
   data() {
