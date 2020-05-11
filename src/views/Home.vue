@@ -65,8 +65,14 @@ export default {
   },
   methods: {
     beginTime() {
-      this.matchshow = true;
-      this.timer = setInterval(this.goTime, 1000);
+      // this.matchshow = true;
+      this.$router.push({
+          path: "match",
+          query: {
+            id: 1
+          }
+        });
+      // this.timer = setInterval(this.goTime, 1000);
     },
     goTo(item, key) {
       if (key == 0) {

@@ -50,6 +50,12 @@ const router = new Router({
           name: "question",
           component: () =>
               import ( /* webpackChunkName: "Home" */ "../views/question.vue")
+      },
+      {
+          path: "/match",
+          name: "match",
+          component: () =>
+              import ( /* webpackChunkName: "Home" */ "../views/match.vue")
       }
     ]
 });
