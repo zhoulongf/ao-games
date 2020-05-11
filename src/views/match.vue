@@ -7,7 +7,7 @@
       </div>
       <div class="match-info-conter">
         <div class="score-left score-left1 span1">0</div>
-        <div class="score-center">20</div>
+        <div class="score-center">{{number}}</div>
         <div class="score-right score-right1 span1">0</div>
       </div>
       <div class="match-info-left">
@@ -45,10 +45,23 @@ export default {
         "关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒离开离开",
       correct: 2,
       corrStatus: false,
-      onceClick: false
+      onceClick: false,
+      timer: null,
+      number: 20
     };
   },
   methods: {
+    clearTimer() {
+      clearInterval(this.timer);
+      this.number = 0;
+    },
+    goTime() {
+      if (this.number <=0) {
+        this.clearTimer(this.timer);
+      } else {
+        --this.number
+      }
+    },
     chooseQuestion(key) {
       if (!this.onceClick) {
         this.onceClick = true;
@@ -60,7 +73,15 @@ export default {
 
         return false;
       }
+    },
+    beforeDestroy() {
+      this.clearTimer(this.timer)
+      this.timer=null
+      this.number=20
     }
+  },
+  mounted(){
+      this.timer = setInterval(this.goTime, 1000);
   }
 };
 </script>
@@ -78,63 +99,63 @@ export default {
     flex-wrap: nowrap;
     justify-content: space-between;
     overflow: hidden;
-    &-left{
-        text-align: center;
-        margin-top: 30px;
-        img{
-            height: 60px;
-            height: 60px;
-        }
-        p{
-            font-size: 14px;
-            font-weight: 400;
-        }
+    &-left {
+      text-align: center;
+      margin-top: 30px;
+      img {
+        height: 60px;
+        height: 60px;
+      }
+      p {
+        font-size: 14px;
+        font-weight: 400;
+      }
     }
-    &-conter{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        text-align: center;
-        .score-left{
-            width: 80px;
-            height: 60px;
-            line-height: 60px;
-            background: url(../assets/img/left.png) no-repeat center center;
-            background-size: 100% 100%;
-            &.score-left1{
-                margin-right: -15px;
-            }
+    &-conter {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: center;
+      .score-left {
+        width: 80px;
+        height: 60px;
+        line-height: 60px;
+        background: url(../assets/img/left.png) no-repeat center center;
+        background-size: 100% 100%;
+        &.score-left1 {
+          margin-right: -15px;
         }
-        .score-center{
-            width: 90px;
-            height: 90px;
-            line-height: 90px;
-            background: url(../assets/img/time.png) no-repeat center center;
-            background-size: 100% 100%;
-            z-index: 2;
-            font-weight: 700;
-            font-size: 20px;
-            color: #fff;
+      }
+      .score-center {
+        width: 90px;
+        height: 90px;
+        line-height: 90px;
+        background: url(../assets/img/time.png) no-repeat center center;
+        background-size: 100% 100%;
+        z-index: 2;
+        font-weight: 700;
+        font-size: 20px;
+        color: #fff;
+      }
+      .score-right {
+        width: 80px;
+        height: 60px;
+        line-height: 60px;
+        background: url(../assets/img/right.png) no-repeat center center;
+        background-size: 100% 100%;
+        &.score-right1 {
+          margin-left: -15px;
         }
-        .score-right{
-            width: 80px;
-            height: 60px;
-            line-height: 60px;
-            background: url(../assets/img/right.png) no-repeat center center;
-            background-size: 100% 100%;
-            &.score-right1{
-                margin-left: -15px;
-            }
-        }
+      }
     }
   }
-  &-answer{
-      text-align: center;
-      height: 20px;
-      line-height: 20px;
-      font-size: 14px;
-      font-weight: 400;
-      color: #555B5E;
+  &-answer {
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #555b5e;
   }
   &-top {
     width: 96%;

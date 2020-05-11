@@ -161,8 +161,11 @@ export default {
       console.log("submit", values);
     },
     beforeDestroy() {
-      this.clearTimer(this.timer);
+      this.phoneDia = false;
+      this.clearTimer(this.timer)
       this.timer=null
+      this.number=60
+      this.codeTitle= "获取验证码"
     }
   }
 };
