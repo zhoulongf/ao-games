@@ -20,13 +20,11 @@ module.exports = {
         disableHostCheck: true,
         // https: false,
         proxy: {
-            '/xscmd': {
-                target: 'http://183.129.131.147:36503',
-                // target: 'http://192.168.0.106:8081',
-                // target: 'http://127.0.0.1:36503',
+            '/aodi': {
+                target: 'https://cs.jumizc.com',
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/xscmd': '/xscmd'
+                    '^/aodi': '/aodi'
                 }
             }
         },

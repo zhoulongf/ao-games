@@ -77,10 +77,7 @@ export default {
     goTo(item, key) {
       if (key == 0) {
         this.$router.push({
-          path: "rank",
-          query: {
-            id: key
-          }
+          path: "rank"
         });
       } else if (key == 1) {
         this.$router.push({

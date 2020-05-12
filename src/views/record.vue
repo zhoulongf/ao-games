@@ -7,7 +7,7 @@
           v-for="(item,index) in 2"
           :key="index"
           :class="[activeIndex == index ? `item${index}` : null,index == 1 ? 'itemLast' : null]"
-          @click="phClick(item,index)"
+          @click="phClick(index)"
         ></div>
       </div>
       <div class="record-titles">
@@ -18,13 +18,13 @@
       <div class="record-infos">
         <div class="record-infos-item" v-for="(item,index) in list" :key="index">
           <div class="item-left">
-            <img src="../assets/img/rankdw.png" alt="暂无图片" />
-            <span class="ative-item span0">{{item.name}}</span>
+            <img :src="item.levelPic" alt="暂无图片" />
+            <span class="ative-item span0">{{item.nickName}}</span>
           </div>
-          <div class="span0">{{item.title}}</div>
+          <div class="span0">{{item.level}}</div>
           <div class="item-right">
-            <p class="span0">{{item.title}}</p>
-            <p class="span2">第{{item.number}}名</p>
+            <p class="span0">{{$moment(item.createTime).format("YYYY年MM月DD日")}}</p>
+            <p class="span2">第{{item.number ? item.number : 0}}名</p>
           </div>
         </div>
       </div>
@@ -37,58 +37,24 @@
   </div>
 </template>
 <script>
+import { awardList } from '@/api/index.js'
 export default {
   name: "record",
   data() {
     return {
       activeIndex: 0,
-      list: [
-        {
-          name: "山鸡炖蘑菇",
-          number: 12,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 13,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 14,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 15,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 16,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 17,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 18,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 19,
-          title: "秋明车神"
-        }
-      ]
+      list: [],
+      allList:[]
     };
   },
   methods: {
-    phClick(item, index) {
+    phClick(index) {
       this.activeIndex = index;
+      if(index == 0){
+        this.list=JSON.parse(JSON.stringify(this.allList.dayList))
+      }else{
+        this.list=JSON.parse(JSON.stringify(this.allList.weekList))
+      }
     },
     goClick(key) {
       if (key === 1) {
@@ -98,7 +64,18 @@ export default {
       } else {
         this.$router.go(-1);
       }
+    },
+    getData(){
+      awardList().then(res =>{
+        if(res.data){
+          this.allList=res.data
+          this.list=res.data.dayList
+        }
+      })
     }
+  },
+  mounted(){
+    this.getData()
   }
 };
 </script>
@@ -146,7 +123,7 @@ export default {
         flex: 2;
       }
       span:nth-child(3) {
-        flex: 2;
+        flex: 3;
       }
     }
     &-infos {
@@ -163,6 +140,7 @@ export default {
         align-items: center;
         padding: 10px 0;
         border-top: 1px solid #fff;
+        border-bottom: 1px solid #fff;
         text-align: center;
         div:nth-child(1) {
           flex: 3;
@@ -171,7 +149,7 @@ export default {
           flex: 2;
         }
         div:nth-child(3) {
-          flex: 2;
+          flex: 3;
         }
         .item-left {
           display: flex;
@@ -184,6 +162,7 @@ export default {
           img {
             width: 40px;
             height: 40px;
+            border-radius: 50%;
           }
         }
         .item-right {

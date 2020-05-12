@@ -6,7 +6,7 @@
         v-for="(item,index) in 3"
         :key="index"
         :class="[activeIndex == index ? `item${index}` : null,index == 2 ? 'itemLast' : null]"
-        @click="phClick(item,index)"
+        @click="phClick(index)"
       ></div>
     </div>
     <div class="rank-infos">
@@ -15,15 +15,15 @@
           <span class="ative-item" v-if="index>2">{{++index}}</span>
         </div>
         <div class="item-center">
-          <img src="../assets/img/rankdw.png" alt="暂无图片" />
+          <img :src="item.litpicPath" alt="暂无图片" />
           <div>
-            <p class="span1 omit">{{item.name}}</p>
-            <p class="span2">本日积分：{{item.number}}分</p>
+            <p class="span1 omit">{{item.nickName}}</p>
+            <p class="span2">本日积分：{{item.border ? item.border : 0}}分</p>
           </div>
         </div>
         <div class="item-right omit">
           <img src="../assets/img/rankdw.png" alt="暂无图片" />
-          <span class="span0">{{item.title}}</span>
+          <span class="span0">{{item.level ? item.level : '--'}}</span>
         </div>
       </div>
     </div>
@@ -59,6 +59,7 @@
   </div>
 </template>
 <script>
+import { ranking } from '@/api/index.js'
 import Vue from "vue";
 import { Dialog } from "vant";
 Vue.use(Dialog);
@@ -68,50 +69,24 @@ export default {
     return {
       activeIndex: 0,
       gzshow:false,
-      list: [
-        {
-          name: "山鸡炖蘑菇",
-          number: 12,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 13,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 14,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 15,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 16,
-          title: "秋明车神"
-        },
-        {
-          name: "山鸡炖蘑菇",
-          number: 17,
-          title: "秋明车神"
-        }
-      ]
+      list: [],
+      allList:[]
     };
   },
   methods: {
-    phClick(item, index) {
+    phClick(index) {
       this.activeIndex = index;
+      if(index == 0){
+        this.list=JSON.parse(JSON.stringify(this.allList.day))
+      }else if(index == 1){
+        this.list=JSON.parse(JSON.stringify(this.allList.week))
+      }else{
+        this.list=JSON.parse(JSON.stringify(this.allList.all))
+      }
     },
     goRecord(){
       this.$router.push({
-          path: "record",
-          query: {
-            id: 1
-          }
+          path: "record"
         });
     },
     gomyRecord(){
@@ -124,7 +99,18 @@ export default {
     },
     gzclick(){
       this.gzshow=true
+    },
+    getData(){
+      ranking().then(res =>{
+        if(res.data){
+          this.allList=res.data
+          this.list=res.data.day
+        }
+      })
     }
+  },
+  mounted(){
+    this.getData()
   }
 };
 </script>
@@ -175,6 +161,7 @@ export default {
     img {
       width: 40px;
       height: 40px;
+      border-radius: 50%;
     }
   }
   .item-right {
