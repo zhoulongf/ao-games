@@ -36,3 +36,13 @@ export function awardList() {
         }
     })
 }
+export function getMyAwardList() {
+    //领奖记录
+    return request({
+        url: apiUrl+`/queue/getMyAwardList`,
+        method: 'post',
+        params:{
+            token:sessionStorage.getItem('token')
+        }
+    })
+}

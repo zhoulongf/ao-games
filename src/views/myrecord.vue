@@ -6,11 +6,11 @@
           <div class="myrecord-list-item-left" :class="item.status ==1 ? 'myinfo' : 'myinfono'">
             <p>
               <span class="title">获奖日期：</span>
-              <span class="info">{{item.time}}</span>
+              <span class="info">{{$moment(item.createTime).format("YYYY年MM月DD日")}}</span>
             </p>
             <p>
               <span class="title">排名：</span>
-              <span class="info omit">周排名第{{item.number}}名</span>
+              <span class="info omit">周排名第{{item.number ? item.number : 0}}名</span>
             </p>
           </div>
           <div
@@ -73,6 +73,7 @@
   </div>
 </template>
 <script>
+import { getMyAwardList } from '@/api/index.js'
 import Vue from "vue";
 import { Dialog, Toast, Form, Field, Button } from "vant";
 Vue.use(Dialog)
@@ -160,13 +161,21 @@ export default {
       this.clearTimer(this.timer);
       console.log("submit", values);
     },
-    beforeDestroy() {
+    getData(){
+      getMyAwardList().then(res =>{
+
+      })
+    }
+  },
+  beforeDestroy() {
       this.phoneDia = false;
       this.clearTimer(this.timer)
       this.timer=null
       this.number=60
       this.codeTitle= "获取验证码"
-    }
+    },
+  mounted(){
+    this.getData()
   }
 };
 </script>
