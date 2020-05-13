@@ -29,18 +29,18 @@
     </div>
     <div class="person-info">
       <div class="info-left">
-        <img src="../assets/img/rankdw.png" alt="暂无图片" />
+        <img :src="myInfo.litpicPath" alt="暂无图片" />
         <div>
-          <p class="span1 omit">山鸡炖蘑菇</p>
-          <p class="span2">本日积分：280分</p>
+          <p class="span1 omit">{{myInfo.nickName ? myInfo.nickName : '***'}}</p>
+          <p class="span2">本日积分：{{myInfo.dayBorder ? myInfo.dayBorder : 0}}分</p>
         </div>
       </div>
       <div class="info-right">
         <div class="right-top">
-          <img src="../assets/img/rankdw.png" alt="暂无图片" />
-          <span class="span1 omit">山鸡炖蘑菇</span>
+          <img src="myInfo.levelPic" alt="暂无图片" />
+          <span class="span1 omit">{{myInfo.level ? myInfo.level : '--'}}</span>
         </div>
-        <p class="span2">本日积分：280分</p>
+        <p class="span2">本日排名：{{myInfo.dayRanking ? myInfo.dayRanking : '*'}}分</p>
       </div>
     </div>
     <div class="rank-bottom">
@@ -70,7 +70,8 @@ export default {
       activeIndex: 0,
       gzshow:false,
       list: [],
-      allList:[]
+      allList:[],
+      myInfo:{}
     };
   },
   methods: {
@@ -102,9 +103,10 @@ export default {
     },
     getData(){
       ranking().then(res =>{
-        if(res.data){
+        if(res.code =='00000'){
           this.allList=res.data
           this.list=res.data.day
+          this.myInfo=res.data.myInfo
         }
       })
     }

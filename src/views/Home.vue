@@ -3,8 +3,8 @@
     <div class="home-content">
       <div class="home-content-top">
         <div class="imgSrc"></div>
-        <div class="infoNub info-left">6666</div>
-        <div class="infoNub info-right">老司机</div>
+        <div class="infoNub info-left">{{userInfo.border ? userInfo.border : 0}}</div>
+        <div class="infoNub info-right">{{userInfo.level ? userInfo.level : '***'}}</div>
       </div>
       <div class="list">
         <img
@@ -15,7 +15,9 @@
           @click="goTo(item,index)"
         />
       </div>
-      <div class="content-img"></div>
+      <div class="content-img">
+        <img :src="userInfo.picUrl" alt="暂无图片">
+      </div>
       <div class="btn-submit" @click="beginTime"></div>
     </div>
     <van-dialog v-model="matchshow" :showConfirmButton="false" class="vantdia">
@@ -42,6 +44,7 @@
 </template>
 
 <script>
+import { homePage } from '@/api/index.js'
 import Vue from "vue";
 import { Dialog } from "vant";
 Vue.use(Dialog);
@@ -56,6 +59,7 @@ export default {
       matchshow: false,
       number: 0,
       timer: null,
+      userInfo:{},
       list: [
         require("../assets/img/ph.png"),
         require("../assets/img/tk.png"),
@@ -89,7 +93,7 @@ export default {
       } else if (key == 2) {
         Dialog.alert({
           title: "游戏规则",
-          message: "后台返给我们"
+          message: this.userInfo.rule ? this.userInfo.rule : '暂无规则'
         }).then(() => {
           // on close
         });
@@ -105,7 +109,18 @@ export default {
     closematch() {
       this.clearTimer();
       this.matchshow = false;
+    },
+    getData(){
+      homePage().then(res =>{
+        console.log(res)
+        if(res.code =='00000'){
+          this.userInfo=res.data
+        }
+      })
     }
+  },
+  mounted(){
+    this.getData()
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -170,6 +185,10 @@ export default {
       height: calc(100vh - 255px);
       margin: 10px auto;
       background: #fff;
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
     .btn-submit {
       width: 40%;

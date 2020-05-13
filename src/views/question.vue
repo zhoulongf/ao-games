@@ -66,7 +66,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .question {
-  height: 100%;
+  height: 100vh;
   position: relative;
   overflow: hidden;
   &-top {

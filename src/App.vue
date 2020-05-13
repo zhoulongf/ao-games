@@ -37,19 +37,38 @@ export default {
     }
   },
   mounted() {
-    let token =this.getUrlParams("token")
-    if (token) {
-      sessionStorage.setItem("token", token);
+    var that = this;
+    let originUrl = location.href;
+    let params = {
+      requestUrl: location.href,
+      token: ""
+    };
+    if (that.getUrlParams("token")) {
+      localStorage.setItem("token", that.getUrlParams("token"));
     }
-    if (!sessionStorage.getItem("token")) {
-      let params = {
-        requestUrl: location.href,
-        token: ""
-      };
-      audirequest(params).then(res => {
+    if (localStorage.getItem("token")) {
+      params.token = localStorage.getItem("token");
+    }
+    audirequest(params).then(res => {
+      if (res.result == "FAIL") {
         location.replace(res.message);
-      });
-    }
+      } else {
+        location.replace(originUrl);
+      }
+    });
+    // let token =this.getUrlParams("token")
+    // if (token) {
+    //   sessionStorage.setItem("token", token);
+    // }
+    // if (!sessionStorage.getItem("token")) {
+    //   let params = {
+    //     requestUrl: location.href,
+    //     token: ""
+    //   };
+    //   audirequest(params).then(res => {
+    //     location.replace(res.message);
+    //   });
+    // }
   }
 };
 </script>

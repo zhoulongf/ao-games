@@ -22,7 +22,7 @@ export function ranking() {
         url: apiUrl+`/queue/ranking`,
         method: 'post',
         params:{
-            token:sessionStorage.getItem('token')
+            token:localStorage.getItem('token')
         }
     })
 }
@@ -32,7 +32,7 @@ export function awardList() {
         url: apiUrl+`/queue/awardList`,
         method: 'post',
         params:{
-            token:sessionStorage.getItem('token')
+            token:localStorage.getItem('token')
         }
     })
 }
@@ -42,7 +42,35 @@ export function getMyAwardList() {
         url: apiUrl+`/queue/getMyAwardList`,
         method: 'post',
         params:{
-            token:sessionStorage.getItem('token')
+            token:localStorage.getItem('token')
         }
+    })
+}
+export function homePage() {
+    //首页信息
+    return request({
+        url: apiUrl+`/queue/homePage`,
+        method: 'post',
+        params:{
+            token:localStorage.getItem('token')
+        }
+    })
+}
+export function getPhoneCode(userPhone) {
+    //手机验证码
+    return request({
+        url: apiUrl+`/queue/getPhoneCode`,
+        method: 'post',
+        params:{
+            userPhone:userPhone
+        }
+    })
+}
+export function getAward(params) {
+    //领取奖励
+    return request({
+        url: apiUrl+`/queue/getAward`,
+        method: 'post',
+        params
     })
 }

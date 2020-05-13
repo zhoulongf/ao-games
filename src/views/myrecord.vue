@@ -3,7 +3,7 @@
     <div class="myrecord-content">
       <div class="myrecord-list">
         <div class="myrecord-list-item" v-for="(item,index) in list" :key="index">
-          <div class="myrecord-list-item-left" :class="item.status ==1 ? 'myinfo' : 'myinfono'">
+          <div class="myrecord-list-item-left" :class="item.isGet == 0 ? 'myinfo' : 'myinfono'">
             <p>
               <span class="title">获奖日期：</span>
               <span class="info">{{$moment(item.createTime).format("YYYY年MM月DD日")}}</span>
@@ -15,7 +15,7 @@
           </div>
           <div
             class="myrecord-list-item-right"
-            :class="item.status ==1 ? 'getPiao' : 'lookma'"
+            :class="item.isGet == 0 ? 'getPiao' : 'lookma'"
             @click="infoClick(item)"
           ></div>
         </div>
@@ -31,8 +31,7 @@
           <img src="../assets/img/x.png" @click="diaFalse" />
         </div>
         <div class="dialong-content" v-if="receive">
-          <p class="duih">兑换码 199999999</p>
-          <p class="duih">兑换码 199999999</p>
+          <p class="duih">兑换码 {{conversion}}</p>
           <p class="title">（到指定平台换取电影票）</p>
           <div class="fubtn">
             <img src="../assets/img/fubtn.png" @click="fuzhi" />
@@ -49,7 +48,7 @@
           <p class="title">中奖信息会发送到以下手机号中，填写后将不可修改</p>
           <van-form @submit="onSubmit">
             <van-field
-              v-model="username"
+              v-model="userphone"
               type="tel"
               placeholder="请输入手机号"
               :rules="[{ required: true, message: '请输入手机号' }]"
@@ -73,7 +72,7 @@
   </div>
 </template>
 <script>
-import { getMyAwardList } from '@/api/index.js'
+import { getMyAwardList, getPhoneCode,getAward } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog, Toast, Form, Field, Button } from "vant";
 Vue.use(Dialog)
@@ -89,21 +88,23 @@ export default {
       receive: true,
       phoneDia: false,
       code: null,
-      username: null,
+      userphone: null,
+      id:null,
       number: 60,
       timer: null,
+      conversion: null,
       codeTitle: "获取验证码",
       list: [
-        { time: "2020年5月7号", number: 2, status: 1 },
-        { time: "2020年5月7号", number: 2, status: 2 },
-        { time: "2020年5月7号", number: 2, status: 1 },
-        { time: "2020年5月7号", number: 2, status: 2 },
-        { time: "2020年5月7号", number: 2, status: 1 },
-        { time: "2020年5月7号", number: 2, status: 2 },
-        { time: "2020年5月7号", number: 2, status: 1 },
-        { time: "2020年5月7号", number: 2, status: 2 },
-        { time: "2020年5月7号", number: 2, status: 1 },
-        { time: "2020年5月7号", number: 2, status: 2 }
+        { time: "2020年5月7号", number: 2, isGet: 0 },
+        { time: "2020年5月7号", number: 2, isGet: 0 },
+        { time: "2020年5月7号", number: 2, isGet: 1, award: 8888 },
+        { time: "2020年5月7号", number: 2, isGet: 0 },
+        { time: "2020年5月7号", number: 2, isGet: 1 },
+        { time: "2020年5月7号", number: 2, isGet: 0 },
+        { time: "2020年5月7号", number: 2, isGet: 1 },
+        { time: "2020年5月7号", number: 2, isGet: 0 },
+        { time: "2020年5月7号", number: 2, isGet: 1 },
+        { time: "2020年5月7号", number: 2, isGet: 0 }
       ]
     };
   },
@@ -112,10 +113,12 @@ export default {
       this.activeIndex = index;
     },
     infoClick(item) {
-      if (item.status == 2) {
+      if (item.isGet == 1) {
+        this.conversion = item.award ? item.award : "****";
+        this.id=item.id ? item.id : null
         this.lookma = true;
         this.receive = true;
-      } else if (item.status == 1) {
+      } else if (item.isGet == 0) {
         // this.lookma=true
         // this.receive=false
         this.phoneDia = true;
@@ -126,9 +129,9 @@ export default {
     },
     diaFalse1() {
       this.phoneDia = false;
-      this.clearTimer(this.timer)
-      this.number=60
-      this.codeTitle= "获取验证码"
+      this.clearTimer(this.timer);
+      this.number = 60;
+      this.codeTitle = "获取验证码";
     },
     fuzhi() {
       Toast({
@@ -141,8 +144,19 @@ export default {
       // },1001)
     },
     getcode() {
-      this.codeTitle = "60s";
-      this.timer = setInterval(this.goTime, 1000);
+      if (!/^1[3456789]\d{9}$/.test(this.userphone)) {
+        Toast({
+          duration: 1000,
+          message:"请输入正确的手机号"
+        });
+      }else{
+        getPhoneCode(this.userphone).then(res => {
+          if (res.code == "00000") {
+            this.codeTitle = "60s";
+            this.timer = setInterval(this.goTime, 1000);
+          }
+        });
+      }
     },
     clearTimer() {
       clearInterval(this.timer);
@@ -158,24 +172,47 @@ export default {
       }
     },
     onSubmit(values) {
-      this.clearTimer(this.timer);
-      console.log("submit", values);
-    },
-    getData(){
-      getMyAwardList().then(res =>{
-
+      let params={
+        id:this.id,
+        userPhone:this.userphone,
+        code:this.code,
+        token:localStorage.getItem('token')
+      }
+      getAward(params).then(res =>{
+        if(res.code =='00000'){
+           this.phoneDia = false
+          this.userphone=null
+          this.code=null
+          this.clearTimer(this.timer);
+          this.getData()
+          Toast({
+            message:"领取成功"
+          })
+        }else{
+          Toast({
+            message:"领取失败"
+          })
+        }
       })
+      
+    },
+    getData() {
+      getMyAwardList().then(res => {
+        if (res.code == "00000") {
+          // this.list=res.data.dayList
+        }
+      });
     }
   },
   beforeDestroy() {
-      this.phoneDia = false;
-      this.clearTimer(this.timer)
-      this.timer=null
-      this.number=60
-      this.codeTitle= "获取验证码"
-    },
-  mounted(){
-    this.getData()
+    this.phoneDia = false;
+    this.clearTimer(this.timer);
+    this.timer = null;
+    this.number = 60;
+    this.codeTitle = "获取验证码";
+  },
+  mounted() {
+    this.getData();
   }
 };
 </script>
@@ -328,7 +365,7 @@ export default {
     margin: 0 auto;
     .dialong-content {
       margin: 0 auto;
-      margin-top: 35%;
+      margin-top: 45%;
       text-align: center;
       .duih {
         height: 30px;
