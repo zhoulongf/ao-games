@@ -39,7 +39,7 @@ export default {
   mounted() {
     let token =this.getUrlParams("token")
     if (token) {
-      sessionStorage.setItem("token", "394865d721587e87d38e9ca7e13404ce");
+      sessionStorage.setItem("token", token);
     }
     if (!sessionStorage.getItem("token")) {
       let params = {
