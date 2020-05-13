@@ -27,7 +27,7 @@ export default {
       if (data.indexOf("?") < 0) return undefined; //判断是否存在参数
       var allParamsArr = data.split("?")[1].split("&"),
         returnObj = {};
-      if (allParamsArr.length == 0) return undefined; //参数是否带惨，狗屁的有的人无聊带问号不带参数的
+      if (allParamsArr.length == 0) return undefined;
       for (var i = 0; i < allParamsArr.length; i++) {
         returnObj[`${allParamsArr[i].split("=")[0]}`] = allParamsArr[i].split(
           "="
