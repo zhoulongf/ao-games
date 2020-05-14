@@ -34,7 +34,7 @@
           <p class="duih">兑换码 {{conversion}}</p>
           <p class="title">（到指定平台换取电影票）</p>
           <div class="fubtn">
-            <img src="../assets/img/fubtn.png" @click="fuzhi" />
+            <img src="../assets/img/fubtn.png" :data-clipboard-text="conversion"  @click="fuzhi" />
           </div>
         </div>
       </div>
@@ -75,6 +75,7 @@
 import { getMyAwardList, getPhoneCode,getAward } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog, Toast, Form, Field, Button } from "vant";
+import Clipboard from 'clipboard'
 Vue.use(Dialog)
   .use(Toast)
   .use(Form)
