@@ -96,16 +96,11 @@ export default {
       conversion: null,
       codeTitle: "获取验证码",
       list: [
-        { time: "2020年5月7号", number: 2, isGet: 0 },
-        { time: "2020年5月7号", number: 2, isGet: 0 },
-        { time: "2020年5月7号", number: 2, isGet: 1, award: 8888 },
-        { time: "2020年5月7号", number: 2, isGet: 0 },
-        { time: "2020年5月7号", number: 2, isGet: 1 },
-        { time: "2020年5月7号", number: 2, isGet: 0 },
-        { time: "2020年5月7号", number: 2, isGet: 1 },
-        { time: "2020年5月7号", number: 2, isGet: 0 },
-        { time: "2020年5月7号", number: 2, isGet: 1 },
-        { time: "2020年5月7号", number: 2, isGet: 0 }
+        { time: "2020年5月7号", number: 2, isGet: 0 ,isAward:false},
+        { time: "2020年5月7号", number: 2, isGet: 0,isAward:true },
+        { time: "2020年5月7号", number: 2, isGet: 1, award: 8888,isAward:false },
+        { time: "2020年5月7号", number: 2, isGet: 0,isAward:true },
+        { time: "2020年5月7号", number: 2, isGet: 1,isAward:true }
       ]
     };
   },
@@ -118,7 +113,7 @@ export default {
         this.conversion = item.award ? item.award : "****";
         this.id=item.id ? item.id : null
         this.lookma = true;
-        this.receive = true;
+        this.receive = item.isAward
       } else if (item.isGet == 0) {
         // this.lookma=true
         // this.receive=false
@@ -256,7 +251,7 @@ export default {
         flex: 1;
         height: 60px;
         &.myinfo {
-          background: url(../assets/img/myinfo.png) no-repeat center center;
+          background: url(../assets/img/123.png) no-repeat center center;
           background-size: 100% 100%;
         }
         &.myinfono {

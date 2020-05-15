@@ -85,7 +85,7 @@ export default {
     width: 92%;
     height: auto;
     margin: 20px auto;
-    background: url(../assets/img/recordbg.png) no-repeat center center;
+    background: url(../assets/img/234.png) no-repeat center center;
     background-size: 100% 100%;
     position: relative;
     &-list {
