@@ -1,8 +1,8 @@
 <template>
   <div class="question">
     <div class="question-top">
-      <span v-if="answerType !='picture'">{{titles}}</span>
-      <img v-else src="../assets/img/homeinfo.jpg" />
+      <span>{{titles}}</span>
+      <img v-if="imgSrc" src="../assets/img/homeinfo.jpg" />
     </div>
     <div class="question-list">
       <div
@@ -35,14 +35,14 @@ export default {
   name: "question",
   data() {
     return {
-      pageNum:1,
-      answerType: "picture",
+      imgSrc: "ee",
+      pageNum: 0,
       titles:
         "关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒离开离开",
       correct: 2,
       corrStatus: false,
       onceClick: false,
-      list:[]
+      list: []
     };
   },
   methods: {
@@ -59,7 +59,15 @@ export default {
       }
     },
     prex(key) {
-      this.answerType = "text";
+      if (key == 2) {
+        ++this.pageNum;
+      }else{
+        --this.pageNum;
+      }
+      if (this.pageNum >0 && this.pageNum < this.list.length - 1) {
+          this.titles = this.list[this.pageNum].title;
+          this.imgSrc = this.list[this.pageNum].bodyPic;
+        }
       this.titles = "双卡双待的时刻";
       this.correct = 2;
       this.corrStatus = false;
@@ -69,10 +77,11 @@ export default {
   mounted() {
     getQuestionList().then(res => {
       console.log(res);
-      if(res.code == '00000'){
-        this.list =res.data
-        this.titles=this.list[0].title
-        this.pageNum=1
+      if (res.code == "00000") {
+        this.list = res.data;
+        this.titles = this.list[0].title;
+        this.imgSrc = this.list[0].bodyPic;
+        this.pageNum = 0;
       }
     });
   }
