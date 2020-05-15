@@ -256,7 +256,7 @@ export default {
         }
         &.myinfono {
           opacity: 0.8;
-          background: url(../assets/img/myinfono.png) no-repeat center center;
+          background: url(../assets/img/03.png) no-repeat center center;
           background-size: 100% 100%;
         }
         p {

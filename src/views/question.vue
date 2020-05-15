@@ -1,8 +1,8 @@
 <template>
   <div class="question">
     <div class="question-top">
-        <span v-if="answerType !='picture'">{{titles}}</span>
-        <img v-else src="../assets/img/homeinfo.jpg">
+      <span v-if="answerType !='picture'">{{titles}}</span>
+      <img v-else src="../assets/img/homeinfo.jpg" />
     </div>
     <div class="question-list">
       <div
@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+import { getQuestionList } from "@/api/index.js";
 import Vue from "vue";
 import { Toast } from "vant";
 Vue.use(Toast);
@@ -34,11 +35,14 @@ export default {
   name: "question",
   data() {
     return {
-        answerType:'picture',
-      titles:"关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒离开离开",
+      pageNum:1,
+      answerType: "picture",
+      titles:
+        "关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒离开离开",
       correct: 2,
       corrStatus: false,
-      onceClick: false
+      onceClick: false,
+      list:[]
     };
   },
   methods: {
@@ -55,12 +59,22 @@ export default {
       }
     },
     prex(key) {
-        this.answerType ='text'
+      this.answerType = "text";
       this.titles = "双卡双待的时刻";
       this.correct = 2;
       this.corrStatus = false;
       this.onceClick = false;
     }
+  },
+  mounted() {
+    getQuestionList().then(res => {
+      console.log(res);
+      if(res.code == '00000'){
+        this.list =res.data
+        this.titles=this.list[0].title
+        this.pageNum=1
+      }
+    });
   }
 };
 </script>
@@ -83,9 +97,9 @@ export default {
     line-height: 20px;
     font-weight: 600;
     font-size: 14px;
-    img{
-        max-width: 100%;
-        max-height: 100%;
+    img {
+      max-width: 100%;
+      max-height: 100%;
     }
   }
   &-list {

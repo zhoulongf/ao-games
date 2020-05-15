@@ -74,3 +74,11 @@ export function getAward(params) {
         params
     })
 }
+export function getQuestionList(params) {
+    //领取奖励
+    return request({
+        url: apiUrl+`/queue/getQuestionList`,
+        method: 'post',
+        params
+    })
+}

@@ -92,10 +92,7 @@ export default {
     },
     gomyRecord(){
       this.$router.push({
-          path: "myrecord",
-          query: {
-            id: 1
-          }
+          path: "myrecord"
         });
     },
     gzclick(){
