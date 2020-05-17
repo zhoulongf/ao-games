@@ -23,7 +23,7 @@
           </div>
           <div class="span0">{{item.level}}</div>
           <div class="item-right">
-            <p class="span0">{{$moment(item.createTime).format("YYYY年MM月DD日")}}</p>
+            <p class="span0">{{item.createTime ? $moment(item.createTime).format("YYYY年MM月DD日") : '--'}}</p>
             <p class="span2">第{{item.number ? item.number : 0}}名</p>
           </div>
         </div>

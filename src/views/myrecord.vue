@@ -6,7 +6,9 @@
           <div class="myrecord-list-item-left" :class="item.isGet == 0 ? 'myinfo' : 'myinfono'">
             <p>
               <span class="title">获奖日期：</span>
-              <span class="info">{{$moment(item.createTime).format("YYYY年MM月DD日")}}</span>
+              <span
+                class="info"
+              >{{item.createTime ? $moment(item.createTime).format("YYYY年MM月DD日") : '--'}}</span>
             </p>
             <p>
               <span class="title">排名：</span>
@@ -34,7 +36,7 @@
           <p class="duih">兑换码 {{conversion}}</p>
           <p class="title">（到指定平台换取电影票）</p>
           <div class="fubtn">
-            <img src="../assets/img/fubtn.png" :data-clipboard-text="conversion"  @click="fuzhi" />
+            <img src="../assets/img/fubtn.png" :data-clipboard-text="conversion" @click="fuzhi" />
           </div>
         </div>
       </div>
@@ -63,7 +65,14 @@
               <span @click="getcode">{{codeTitle}}</span>
             </div>
             <div style="margin: 16px;">
-              <van-button round block type="info" native-type="submit">提交</van-button>
+              <van-button
+                round
+                block
+                type="info"
+                native-type="submit"
+                class="btns"
+                :disabled="!userphone || !code"
+              >提交</van-button>
             </div>
           </van-form>
         </div>
@@ -72,10 +81,10 @@
   </div>
 </template>
 <script>
-import { getMyAwardList, getPhoneCode,getAward } from "@/api/index.js";
+import { getMyAwardList, getPhoneCode, getAward } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog, Toast, Form, Field, Button } from "vant";
-import Clipboard from 'clipboard'
+import Clipboard from "clipboard";
 Vue.use(Dialog)
   .use(Toast)
   .use(Form)
@@ -90,18 +99,12 @@ export default {
       phoneDia: false,
       code: null,
       userphone: null,
-      id:null,
+      id: null,
       number: 60,
       timer: null,
       conversion: null,
       codeTitle: "获取验证码",
-      list: [
-        { time: "2020年5月7号", number: 2, isGet: 0 ,isAward:false},
-        { time: "2020年5月7号", number: 2, isGet: 0,isAward:true },
-        { time: "2020年5月7号", number: 2, isGet: 1, award: 8888,isAward:false },
-        { time: "2020年5月7号", number: 2, isGet: 0,isAward:true },
-        { time: "2020年5月7号", number: 2, isGet: 1,isAward:true }
-      ]
+      list: []
     };
   },
   methods: {
@@ -111,9 +114,9 @@ export default {
     infoClick(item) {
       if (item.isGet == 1) {
         this.conversion = item.award ? item.award : "****";
-        this.id=item.id ? item.id : null
+        this.id = item.id ? item.id : null;
         this.lookma = true;
-        this.receive = item.isAward
+        this.receive = item.isAward;
       } else if (item.isGet == 0) {
         // this.lookma=true
         // this.receive=false
@@ -125,7 +128,12 @@ export default {
     },
     diaFalse1() {
       this.phoneDia = false;
+      this.clearInfo()
+    },
+    clearInfo() {
       this.clearTimer(this.timer);
+      this.userphone = null;
+      this.code = null;
       this.number = 60;
       this.codeTitle = "获取验证码";
     },
@@ -143,9 +151,9 @@ export default {
       if (!/^1[3456789]\d{9}$/.test(this.userphone)) {
         Toast({
           duration: 1000,
-          message:"请输入正确的手机号"
+          message: "请输入正确的手机号"
         });
-      }else{
+      } else {
         getPhoneCode(this.userphone).then(res => {
           if (res.code == "00000") {
             this.codeTitle = "60s";
@@ -168,44 +176,39 @@ export default {
       }
     },
     onSubmit(values) {
-      let params={
-        id:this.id,
-        userPhone:this.userphone,
-        code:this.code,
-        token:localStorage.getItem('token')
-      }
-      getAward(params).then(res =>{
-        if(res.code =='00000'){
-           this.phoneDia = false
-          this.userphone=null
-          this.code=null
-          this.clearTimer(this.timer);
-          this.getData()
+      let params = {
+        id: this.id,
+        userPhone: this.userphone,
+        code: this.code,
+        token: localStorage.getItem("token")
+      };
+      getAward(params).then(res => {
+        if (res.code == "00000") {
+          this.phoneDia = false;
+          this.clearInfo()
+          this.getData();
           Toast({
-            message:"领取成功"
-          })
-        }else{
+            message: "领取成功"
+          });
+        } else {
+          this.clearInfo()
           Toast({
-            message:"领取失败"
-          })
+            message: res.message
+          });
         }
-      })
-      
+      });
     },
     getData() {
       getMyAwardList().then(res => {
         if (res.code == "00000") {
-          // this.list=res.data.dayList
+          this.list = res.data.dayList;
         }
       });
     }
   },
   beforeDestroy() {
     this.phoneDia = false;
-    this.clearTimer(this.timer);
-    this.timer = null;
-    this.number = 60;
-    this.codeTitle = "获取验证码";
+    this.clearInfo()
   },
   mounted() {
     this.getData();
@@ -332,7 +335,7 @@ export default {
   }
   .phone-content {
     .close {
-      background: #000;
+      background: #b3d3d3;
     }
     .form-info {
       padding: 20px;
@@ -384,6 +387,9 @@ export default {
         }
       }
     }
+  }
+  .btns {
+    background: #b3d3d3;
   }
 }
 </style>

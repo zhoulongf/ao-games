@@ -53,7 +53,7 @@
     <div class="rigtFix" @click="gomyRecord"></div>
     <van-dialog v-model="gzshow" title="游戏规则">
       <div class="gz-dialog">
-        日排行、周排行、总排行，分别读取后台配置的相应的游戏规则
+        {{myInfo.rankingRule ? myInfo.rankingRule : '暂无规则'}}
       </div>
     </van-dialog>
   </div>
@@ -225,7 +225,7 @@ export default {
     justify-content: space-between;
     margin: 5px auto;
     .info-left {
-      width: 45%;
+      width: 48%;
       height: 60px;
       display: flex;
       flex-direction: row;
