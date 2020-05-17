@@ -2,18 +2,18 @@
   <div class="question">
     <div class="question-top">
       <span>{{titles}}</span>
-      <img v-if="imgSrc" src="../assets/img/homeinfo.jpg" />
+      <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="question-list">
       <div
         class="question-list-item"
-        v-for="index in 3"
+        v-for="(item,index) in questions"
+        @click="chooseQuestion(item,index)"
         :key="index"
-        @click="chooseQuestion(index)"
       >
-        <span>{{index}}</span>
+        <span>{{item}}</span>
         <img
-          v-if="correct == index && corrStatus"
+          v-if="correct == item && (corrStatus && corrStatus !=-1)"
           class="correctquestion"
           src="../assets/img/yesquestion.png"
         />
@@ -21,7 +21,7 @@
     </div>
     <div class="question-foot">
       <img src="../assets/img/prequestion.png" @click="prex(1)" />
-      <div>问题1/20</div>
+      <div>问题{{pageNum}}/{{this.list.length}}</div>
       <img src="../assets/img/nextquestion.png" @click="prex(2)" />
     </div>
   </div>
@@ -35,53 +35,65 @@ export default {
   name: "question",
   data() {
     return {
-      imgSrc: "ee",
+      imgSrc: null,
       pageNum: 0,
       titles:
         "关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒离开离开",
-      correct: 2,
-      corrStatus: false,
+      correct: null,
+      corrStatus: -1, //判断答题是否正确
       onceClick: false,
+      questions: [],
       list: []
     };
   },
   methods: {
-    chooseQuestion(key) {
+    chooseQuestion(item, key) {
       if (!this.onceClick) {
         this.onceClick = true;
-        if (this.correct != key) {
+        if (this.correct != item) {
           Toast("选择不正确");
         } else {
           this.corrStatus = true;
         }
-
         return false;
       }
     },
     prex(key) {
-      if (key == 2) {
-        ++this.pageNum;
-      }else{
-        --this.pageNum;
+      if(this.corrStatus ==-1){
+        Toast("请先选题");
+        return false
       }
-      if (this.pageNum >0 && this.pageNum < this.list.length - 1) {
-          this.titles = this.list[this.pageNum].title;
-          this.imgSrc = this.list[this.pageNum].bodyPic;
+      if(key ==2){
+        if(this.pageNum < this.list.length-1){
+          this.pageNum++
+        }else{
+          return false
         }
-      this.titles = "双卡双待的时刻";
-      this.correct = 2;
-      this.corrStatus = false;
-      this.onceClick = false;
+      }else{
+        if(this.pageNum > 0){
+          this.pageNum--
+        }else{
+          return false
+        }
+      }
+        this.titles = this.list[this.pageNum].body;
+        this.imgSrc = this.list[this.pageNum].bodyPic;
+        this.questions = this.list[this.pageNum].questions;
+        this.correct = this.list[this.pageNum].result;
+        this.corrStatus = false;
+        this.onceClick = false;
     }
   },
   mounted() {
     getQuestionList().then(res => {
-      console.log(res);
       if (res.code == "00000") {
         this.list = res.data;
-        this.titles = this.list[0].title;
-        this.imgSrc = this.list[0].bodyPic;
-        this.pageNum = 0;
+        if (this.list.length > 0) {
+          this.titles = this.list[0].body;
+          this.imgSrc = this.list[0].bodyPic;
+          this.questions = this.list[0].questions;
+          this.correct = this.list[0].result;
+        }
       }
     });
   }

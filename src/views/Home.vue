@@ -16,7 +16,7 @@
         />
       </div>
       <div class="content-img">
-        <img :src="userInfo.picUrl" alt="暂无图片">
+        <img :src="userInfo.picUrl" alt="暂无图片" />
       </div>
       <div class="btn-submit" @click="beginTime"></div>
     </div>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { homePage } from '@/api/index.js'
+import { homePage, chooseUser } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog } from "vant";
 Vue.use(Dialog);
@@ -59,7 +59,7 @@ export default {
       matchshow: false,
       number: 0,
       timer: null,
-      userInfo:{},
+      userInfo: {},
       list: [
         require("../assets/img/ph.png"),
         require("../assets/img/tk.png"),
@@ -69,14 +69,37 @@ export default {
   },
   methods: {
     beginTime() {
+      if (typeof WebSocket === "undefined") {
+        alert("您的浏览器不支持socket");
+      }
+      window.ws = new WebSocket(
+        "ws://183.134.198.46:8123/websocket/" + localStorage.getItem("token")
+      );
+      console.log(window.ws);
+      window.ws.onopen = this.onopen;
+      window.ws.onmessage = this.onmessage;
+      window.ws.onerror = this.onerror;
+      window.ws.onclose = this.onclose;
       // this.matchshow = true;
       // this.timer = setInterval(this.goTime, 1000);
-      this.$router.push({
-          path: "match",
-          query: {
-            id: 1
-          }
-        });
+      // this.$router.push({
+      //     path: "match",
+      //     query: {
+      //       id: 1
+      //     }
+      //   });
+    },
+    onopen(e) {
+      alert("链接成功");
+    },
+    onmessage(data) {
+      console.log(data);
+    },
+    onerror(e) {
+      console.log(e);
+    },
+    onclose(e) {
+      console.log("断开连接");
     },
     goTo(item, key) {
       if (key == 0) {
@@ -93,7 +116,7 @@ export default {
       } else if (key == 2) {
         Dialog.alert({
           title: "游戏规则",
-          message: this.userInfo.rule ? this.userInfo.rule : '暂无规则'
+          message: this.userInfo.rule ? this.userInfo.rule : "暂无规则"
         }).then(() => {
           // on close
         });
@@ -110,17 +133,16 @@ export default {
       this.clearTimer();
       this.matchshow = false;
     },
-    getData(){
-      homePage().then(res =>{
-        console.log(res)
-        if(res.code =='00000'){
-          this.userInfo=res.data
+    getData() {
+      homePage().then(res => {
+        if (res.code == "00000") {
+          this.userInfo = res.data;
         }
-      })
+      });
     }
   },
-  mounted(){
-    this.getData()
+  mounted() {
+    this.getData();
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -185,7 +207,7 @@ export default {
       height: calc(100vh - 255px);
       margin: 10px auto;
       background: #fff;
-      img{
+      img {
         width: 100%;
         height: 100%;
       }
