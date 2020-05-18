@@ -21,7 +21,7 @@
     </div>
     <div class="question-foot">
       <img src="../assets/img/prequestion.png" @click="prex(1)" />
-      <div>问题{{pageNum}}/{{this.list.length}}</div>
+      <div>问题{{currentPage}}/{{this.list.length}}</div>
       <img src="../assets/img/nextquestion.png" @click="prex(2)" />
     </div>
   </div>
@@ -37,8 +37,8 @@ export default {
     return {
       imgSrc: null,
       pageNum: 0,
-      titles:
-        "关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒离开离开",
+      currentPage:1,
+      titles: null,
       correct: null,
       corrStatus: -1, //判断答题是否正确
       onceClick: false,
@@ -59,29 +59,33 @@ export default {
       }
     },
     prex(key) {
-      if(this.corrStatus ==-1){
+      if (this.corrStatus == -1) {
         Toast("请先选题");
-        return false
+        return false;
       }
-      if(key ==2){
-        if(this.pageNum < this.list.length-1){
-          this.pageNum++
-        }else{
-          return false
+      if (key == 2) {
+        if (this.pageNum < this.list.length - 1) {
+          this.pageNum++;
+          this.currentPage +=1
+        } else {
+          Toast("已经是最后一题了");
+          return false;
         }
-      }else{
-        if(this.pageNum > 0){
-          this.pageNum--
-        }else{
-          return false
+      } else {
+        if (this.pageNum > 0) {
+          this.pageNum--;
+          this.currentPage -=1;
+        } else {
+          Toast("已经是第一题了");
+          return false;
         }
       }
-        this.titles = this.list[this.pageNum].body;
-        this.imgSrc = this.list[this.pageNum].bodyPic;
-        this.questions = this.list[this.pageNum].questions;
-        this.correct = this.list[this.pageNum].result;
-        this.corrStatus = false;
-        this.onceClick = false;
+      this.titles = this.list[this.pageNum].body;
+      this.imgSrc = this.list[this.pageNum].bodyPic;
+      this.questions = this.list[this.pageNum].questions;
+      this.correct = this.list[this.pageNum].result;
+      this.corrStatus = false;
+      this.onceClick = false;
     }
   },
   mounted() {
@@ -125,10 +129,10 @@ export default {
   }
   &-list {
     width: 80%;
-    margin: 20px auto;
+    margin: 10px auto;
     overflow: hidden;
     &-item {
-      margin-top: 20px;
+      margin-top: 10px;
       min-height: 60px;
       padding: 0 20px;
       background: url(../assets/img/answer.png) no-repeat center center;

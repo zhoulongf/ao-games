@@ -17,7 +17,7 @@
         <div class="item-center">
           <img :src="item.litpicPath" alt="暂无图片" />
           <div>
-            <p class="span1 omit">{{item.nickName}}</p>
+            <p class="span0 omit">{{item.nickName}}</p>
             <p class="span2">本日积分：{{item.border ? item.border : 0}}分</p>
           </div>
         </div>
@@ -31,20 +31,20 @@
       <div class="info-left">
         <img :src="myInfo.litpicPath" alt="暂无图片" />
         <div>
-          <p class="span1 omit">{{myInfo.nickName ? myInfo.nickName : '***'}}</p>
+          <p class="span0 omit">{{myInfo.nickName ? myInfo.nickName : '***'}}</p>
           <p class="span2">本日积分：{{myInfo.dayBorder ? myInfo.dayBorder : 0}}分</p>
         </div>
       </div>
       <div class="info-right">
         <div class="right-top">
           <img src="myInfo.levelPic" alt="暂无图片" />
-          <span class="span1 omit">{{myInfo.level ? myInfo.level : '--'}}</span>
+          <span class="span0 omit">{{myInfo.level ? myInfo.level : '--'}}</span>
         </div>
         <p class="span2">本日排名：{{myInfo.dayRanking ? myInfo.dayRanking : '*'}}分</p>
       </div>
     </div>
     <div class="rank-bottom">
-      <p class="rank-top span1">进入排行榜前N名，可获取影票N张</p>
+      <p class="rank-top span0">进入排行榜前N名，可获取影票N张</p>
       <div class="foot-bottom">
         <span class="span0" @click="gzclick">游戏规则</span>
         <span class="span0" @click="goRecord">获奖记录</span>

@@ -27,17 +27,19 @@
         <span class="span2">以上为全部内容</span>
       </div>
     </div>
-    <van-dialog v-model="lookma" :showConfirmButton="false" class="vantdia" width="75%">
+    <van-dialog v-model="lookma" :showConfirmButton="false" class="vantdia" width="92%">
       <div class="lookma-dialog" :class="receive ? 'lookyes' : 'lookno'">
         <div class="close">
           <img src="../assets/img/x.png" @click="diaFalse" />
         </div>
-        <div class="dialong-content" v-if="receive">
-          <p class="duih">兑换码 {{conversion}}</p>
-          <p class="title">（到指定平台换取电影票）</p>
-          <div class="fubtn">
-            <img src="../assets/img/fubtn.png" :data-clipboard-text="conversion" @click="fuzhi" />
+        <div class="dialong-content">
+          <div class="dialong-content-item" v-for="(item,index) in conversion" :key="index">
+            <p class="duih">兑换码 {{item}}</p>
+            <div class="fubtn" :data-clipboard-text="conversion" @click="fuzhi">
+              <img src="../assets/img/fuzhi1.png" :data-clipboard-text="conversion" @click="fuzhi" />
+            </div>
           </div>
+          <p class="title" @click="lookPiao">点击查看领取流程</p>
         </div>
       </div>
     </van-dialog>
@@ -78,27 +80,37 @@
         </div>
       </div>
     </van-dialog>
+    <van-overlay :show="optionShow" @click="optionShow = false" z-index=9999>
+      <div class="wrapper">
+        <div class="block">
+          <img :src="defaultsrc">
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 <script>
 import { getMyAwardList, getPhoneCode, getAward } from "@/api/index.js";
 import Vue from "vue";
-import { Dialog, Toast, Form, Field, Button } from "vant";
+import { Dialog, Toast, Form, Field, Button, Overlay } from "vant";
 import Clipboard from "clipboard";
 Vue.use(Dialog)
   .use(Toast)
   .use(Form)
   .use(Field)
-  .use(Button);
+  .use(Button)
+  .use(Overlay);
 export default {
   name: "record",
   data() {
     return {
+      defaultsrc:require('@/assets/img/picture.jpeg'),
       lookma: false,
       receive: true,
       phoneDia: false,
       code: null,
       userphone: null,
+      optionShow:false,
       id: null,
       number: 60,
       timer: null,
@@ -113,22 +125,24 @@ export default {
     },
     infoClick(item) {
       if (item.isGet == 1) {
-        this.conversion = item.award ? item.award : "****";
+        this.conversion = item.award ? item.award.split(",") : [];
         this.id = item.id ? item.id : null;
         this.lookma = true;
-        this.receive = item.isAward;
       } else if (item.isGet == 0) {
         // this.lookma=true
         // this.receive=false
         this.phoneDia = true;
       }
     },
+    lookPiao(){
+      this.optionShow=true
+    },
     diaFalse() {
       this.lookma = false;
     },
     diaFalse1() {
       this.phoneDia = false;
-      this.clearInfo()
+      this.clearInfo();
     },
     clearInfo() {
       this.clearTimer(this.timer);
@@ -185,13 +199,13 @@ export default {
       getAward(params).then(res => {
         if (res.code == "00000") {
           this.phoneDia = false;
-          this.clearInfo()
+          this.clearInfo();
           this.getData();
           Toast({
             message: "领取成功"
           });
         } else {
-          this.clearInfo()
+          this.clearInfo();
           Toast({
             message: res.message
           });
@@ -202,13 +216,14 @@ export default {
       getMyAwardList().then(res => {
         if (res.code == "00000") {
           this.list = res.data.dayList;
+          this.defaultsrc=res.data.picUrl
         }
       });
     }
   },
   beforeDestroy() {
     this.phoneDia = false;
-    this.clearInfo()
+    this.clearInfo();
   },
   mounted() {
     this.getData();
@@ -360,17 +375,22 @@ export default {
     }
   }
   .lookma-dialog {
-    height: calc(100vh - 220px);
+    height: calc(100vh - 160px);
     margin: 0 auto;
     .dialong-content {
       margin: 0 auto;
       margin-top: 45%;
-      text-align: center;
+      &-item {
+        width: 80%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-around;
+      }
       .duih {
         height: 30px;
         line-height: 30px;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 14px;
       }
       .title {
         height: 20px;
@@ -378,14 +398,37 @@ export default {
         font-size: 12px;
         font-weight: 400;
         color: #bdbdbd;
+        text-align: center;
+        color: #b3d3d3;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-top: 10px;
       }
       .fubtn {
-        margin-top: 20px;
+        margin-top: 5px;
         img {
-          height: 30px;
+          height: 20px;
           cursor: pointer;
         }
       }
+    }
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .block {
+    width: 300px;
+    height: 300px;
+    background-color: #fff;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    img{
+      width: 100%;
+      height: auto;
     }
   }
   .btns {
