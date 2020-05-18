@@ -32,6 +32,7 @@
         <div class="close">
           <img src="../assets/img/x.png" @click="diaFalse" />
         </div>
+        <div class="receiveyes">领取成功</div>
         <div class="dialong-content">
           <div class="dialong-content-item" v-for="(item,index) in conversion" :key="index">
             <p class="duih">兑换码 {{item}}</p>
@@ -329,7 +330,7 @@ export default {
     }
   }
   .lookyes {
-    background: url(../assets/img/myrecordyes.png) no-repeat center center;
+    background: url(../assets/img/jump.png) no-repeat center center;
     background-size: 100% 100%;
   }
   .lookno {
@@ -377,6 +378,19 @@ export default {
   .lookma-dialog {
     height: calc(100vh - 160px);
     margin: 0 auto;
+    position: relative;
+    .receiveyes{
+      position: absolute;
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      top: 15%;
+      left: 0;
+      font-size: 30px;
+      font-weight: bolder;
+      color: #fff;
+    }
     .dialong-content {
       margin: 0 auto;
       margin-top: 45%;

@@ -73,7 +73,7 @@ export default {
         alert("您的浏览器不支持socket");
       }
       window.ws = new WebSocket(
-        "ws://183.134.198.46:8123/websocket/" + localStorage.getItem("token")
+        "ws://192.168.10.2:8123/websocket/" + localStorage.getItem("token")
       );
       console.log(window.ws);
       window.ws.onopen = this.onopen;
