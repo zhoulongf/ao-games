@@ -2,7 +2,9 @@
   <div class="home">
     <div class="home-content">
       <div class="home-content-top">
-        <div class="imgSrc"></div>
+        <div class="imgSrc">
+          <img :src="userInfo.picUrl" />
+        </div>
         <div class="infoNub info-left">{{userInfo.border ? userInfo.border : 0}}</div>
         <div class="infoNub info-right">{{userInfo.level ? userInfo.level : '***'}}</div>
       </div>
@@ -28,13 +30,13 @@
         </div>
         <div class="match-center">
           <div class="match-center-left">
-            <img src="../assets/img/myrecordyes.png" />
-            <span class="span0">微信名称</span>
+            <img :src="userInfo.picUrl" />
+            <span class="span0">{{userInfo.nickName}}</span>
           </div>
           <div class="match-center-center">vs</div>
           <div class="match-center-left">
-            <img src="../assets/img/myrecordyes.png" />
-            <span class="span0">微信名称</span>
+            <img :src="otherInfo.opponentLitpicPath ? otherInfo.opponentLitpicPath : defaultSrc" />
+            <span class="span0">{{otherInfo.opponentName ? otherInfo.opponentName : '***'}}</span>
           </div>
         </div>
         <div class="match-footer" @click="closematch"></div>
@@ -46,8 +48,8 @@
 <script>
 import { homePage, chooseUser } from "@/api/index.js";
 import Vue from "vue";
-import { Dialog } from "vant";
-Vue.use(Dialog);
+import { Dialog, Toast } from "vant";
+Vue.use(Dialog).use(Toast);
 import MyHeader from "@/components/my-header";
 export default {
   name: "Home",
@@ -60,6 +62,9 @@ export default {
       number: 0,
       timer: null,
       userInfo: {},
+      defaultSrc:require('@/assets/img/head.png'),
+      otherInfo:{},
+      myUser:{},
       list: [
         require("../assets/img/ph.png"),
         require("../assets/img/tk.png"),
@@ -75,31 +80,35 @@ export default {
       window.ws = new WebSocket(
         "ws://192.168.10.2:8123/websocket/" + localStorage.getItem("token")
       );
-      console.log(window.ws);
       window.ws.onopen = this.onopen;
       window.ws.onmessage = this.onmessage;
       window.ws.onerror = this.onerror;
-      window.ws.onclose = this.onclose;
-      // this.matchshow = true;
-      // this.timer = setInterval(this.goTime, 1000);
-      // this.$router.push({
-      //     path: "match",
-      //     query: {
-      //       id: 1
-      //     }
-      //   });
     },
     onopen(e) {
-      alert("链接成功");
+      console.log('连接成功')
+      this.matchshow = true;
+      this.timer = setInterval(this.goTime, 1000);
     },
     onmessage(data) {
-      console.log(data);
+      let obj = JSON.parse(data.data);
+      this.otherInfo=obj.opponentUser
+      this.myUser=obj.myUser
+      localStorage.setItem('otherInfo',JSON.stringify(this.otherInfo))
+      localStorage.setItem('myUser',JSON.stringify(this.myUser))
+      localStorage.setItem('questionList',JSON.stringify(obj.questionList))
+      localStorage.setItem('playUserId',obj.playUserId)
+      Toast({
+        message: "匹配成功",
+        onOpened: () => {
+          this.closematch();
+          this.$router.push({
+            path: "match"
+          });
+        }
+      });
     },
     onerror(e) {
       console.log(e);
-    },
-    onclose(e) {
-      console.log("断开连接");
     },
     goTo(item, key) {
       if (key == 0) {
@@ -130,8 +139,12 @@ export default {
       this.number = 0;
     },
     closematch() {
+      window.ws.onclose = this.onclose;
       this.clearTimer();
       this.matchshow = false;
+    },
+    onclose(){
+      console.log('断开链接')
     },
     getData() {
       homePage().then(res => {
@@ -169,11 +182,14 @@ export default {
         position: absolute;
         width: 60px;
         height: 60px;
-        background: #ff0;
-        border-radius: 50%;
         top: -15px;
         left: 50%;
         transform: translateX(-50%);
+        img {
+          border-radius: 50%;
+          width: 100%;
+          height: 100%;
+        }
       }
       .infoNub {
         position: absolute;

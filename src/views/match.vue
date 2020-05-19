@@ -2,8 +2,8 @@
   <div class="match">
     <div class="match-info">
       <div class="match-info-left">
-        <img src="../assets/img/head.png" />
-        <p>微信昵称</p>
+        <img :src="myUser.myLitpicPath ? myUser.myLitpicPath : defaultHead" />
+        <p>{{myUser.myName ? myUser.myName : 'xxx'}}</p>
       </div>
       <div class="match-info-conter">
         <div class="score-left score-left1 span1">0</div>
@@ -11,22 +11,28 @@
         <div class="score-right score-right1 span1">0</div>
       </div>
       <div class="match-info-left">
-        <img src="../assets/img/head.png" />
-        <p>微信昵称</p>
+        <img :src="otherInfo.opponentLitpicPath ? otherInfo.opponentLitpicPath : defaultHead" />
+        <p>{{otherInfo.opponentName ? otherInfo.opponentName : 'xxx'}}</p>
       </div>
     </div>
-    <div class="match-answer">问题1/10</div>
+    <div class="match-answer">问题{{pageNum+1}}/{{questionList.length}}</div>
     <div class="match-top">
-      <span v-if="answerType !='picture'">{{titles}}</span>
-      <img v-else src="../assets/img/homeinfo.jpg" />
+      <span>{{titles}}</span>
+      <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="match-list">
-      <div class="match-list-item" v-for="index in 3" :key="index" @click="chooseQuestion(index)">
-        <span>{{index}}</span>
+      <div
+        class="match-list-item"
+        v-for="(item,index) in questions"
+        :key="index"
+        @click="chooseQuestion(index)"
+      >
+        <span>{{item}}</span>
+        <img class="correctquestion" v-if="otherStatus == index" :src="otherResulr == item ? srcRight : srcError">
         <img
-          v-if="correct == index && corrStatus"
+          v-if=" currentNUm==index && corrStatus"
           class="correctquestion"
-          src="../assets/img/yesquestion.png"
+          :src="correct == item ? srcRight : srcError"
         />
       </div>
     </div>
@@ -40,14 +46,24 @@ export default {
   name: "match",
   data() {
     return {
-      answerType: "picture",
-      titles:
-        "关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒关于大好事领导刷卡睡觉撒老客户的哈是上课啦挥洒离开离开",
-      correct: 2,
-      corrStatus: false,
-      onceClick: false,
+      titles: null,
+      correct: null,//当前题的答案
+      imgSrc: null,
+      pageNum: 0,
+      corrStatus: 1,//当前答题者是否答对
+      onceClick: false,//每道题只能点击一次
       timer: null,
-      number: 20
+      currentNUm:-1,//获取当前答题者点击的哪一个选项
+      otherStatus:0,//另一个答题者是否答对
+      otherResulr:'C。adC',//另一个答题者的答案
+      number: 20,
+      questions: [],
+      otherInfo: JSON.parse(localStorage.getItem("otherInfo")),
+      myUser:JSON.parse(localStorage.getItem("myUser")),
+      questionList:JSON.parse(localStorage.getItem("questionList")),
+      defaultHead: require("@/assets/img/head.png"),
+      srcRight: require("@/assets/img/yesquestion.png"),
+      srcError: require("@/assets/img/error.png")
     };
   },
   methods: {
@@ -56,32 +72,62 @@ export default {
       this.number = 0;
     },
     goTime() {
-      if (this.number <=0) {
+      if (this.number <= 0) {
         this.clearTimer(this.timer);
       } else {
-        --this.number
+        --this.number;
       }
     },
     chooseQuestion(key) {
       if (!this.onceClick) {
+        this.currentNUm=key
         this.onceClick = true;
         if (this.correct != key) {
-          Toast("选择不正确");
+          this.corrStatus = -1;
         } else {
-          this.corrStatus = true;
+          this.corrStatus = 1;
         }
-
         return false;
       }
     },
     beforeDestroy() {
-      this.clearTimer(this.timer)
-      this.timer=null
-      this.number=20
+      this.clearTimer(this.timer);
+      this.timer = null;
+      this.number = 20;
+    },
+    beginTime() {
+      if (typeof WebSocket === "undefined") {
+        alert("您的浏览器不支持socket");
+      }
+      window.math = new WebSocket(
+        "ws://192.168.10.2:8123/question/" + localStorage.getItem("token")
+      );
+      window.math.onopen = this.onopen;
+      window.math.onmessage = this.onmessage;
+      window.math.onerror = this.onerror;
+    },
+    onopen(e) {
+      console.log("连接成功");
+      this.timer = setInterval(this.goTime, 1000);
+    },
+    onmessage(data) {
+      console.log(data);
+      let obj = JSON.parse(data.data);
+    },
+    onerror(e) {
+      console.log(e);
+    },
+    getData() {
+      let questionList=this.questionList
+      this.titles = questionList[this.pageNum].body;
+      this.imgSrc = questionList[this.pageNum].bodyPic;
+      this.questions = questionList[this.pageNum].questions;
+      this.correct = questionList[this.pageNum].result;
     }
   },
-  mounted(){
-      this.timer = setInterval(this.goTime, 1000);
+  mounted() {
+    this.beginTime();
+    this.getData();
   }
 };
 </script>
@@ -103,8 +149,9 @@ export default {
       text-align: center;
       margin-top: 30px;
       img {
+        width: 60px;
         height: 60px;
-        height: 60px;
+        border-radius: 50%;
       }
       p {
         font-size: 14px;
