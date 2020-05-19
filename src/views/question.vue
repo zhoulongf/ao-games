@@ -1,7 +1,7 @@
 <template>
   <div class="question">
     <div class="question-top">
-      <span>{{titles}}</span>
+      <div>{{titles}}</div>
       <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="question-list">
@@ -124,7 +124,7 @@ export default {
     font-size: 14px;
     img {
       max-width: 100%;
-      max-height: 100%;
+      max-height: 140px;
     }
   }
   &-list {

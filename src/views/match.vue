@@ -6,9 +6,9 @@
         <p>{{myUser.myName ? myUser.myName : 'xxx'}}</p>
       </div>
       <div class="match-info-conter">
-        <div class="score-left score-left1 span1">0</div>
+        <div class="score-left score-left1 span1">{{myGrad}}</div>
         <div class="score-center">{{number}}</div>
-        <div class="score-right score-right1 span1">0</div>
+        <div class="score-right score-right1 span1">{{otherGrade}}</div>
       </div>
       <div class="match-info-left">
         <img :src="otherInfo.litpicPath ? otherInfo.litpicPath : defaultHead" />
@@ -32,7 +32,7 @@
           class="correctquestion"
           v-if="otherStatus == index"
           :src="otherResulr == item ? srcRight : srcError"
-        /> -->
+        />-->
         <img
           v-if=" currentNUm==index && corrStatus"
           class="correctquestion"
@@ -78,18 +78,23 @@ export default {
   methods: {
     clearTimer() {
       clearInterval(this.timer);
-      this.timer=null
-      this.number = 0;
+      this.timer = null;
+      this.number = 20;
     },
     goTime() {
       if (this.number <= 0) {
         this.clearTimer(this.timer);
-        if (!this.questionId) {
-          let stringInfo = JSON.stringify({
+        if (!this.option) {
+          let stringInfo = {
             questionId: this.questionId,
             option: this.option
-          });
-          window.math.send(stringInfo);
+          };
+          console.log(window.math.readyState);
+          if (window.math.readyState === 1) {
+            window.math.send(JSON.stringify(stringInfo), res => {
+              console.log(res);
+            });
+          }
         }
       } else {
         --this.number;
@@ -115,7 +120,6 @@ export default {
         } else {
           this.corrStatus = 1;
         }
-        console.log("发送一个");
         let stringInfo = {
           questionId: this.questionId,
           option: this.option
@@ -155,14 +159,16 @@ export default {
         this.pageNum++;
         this.getData(1);
       }
-      alert(obj.next)
-      if(this.pageNum == this.questionList.length-1){
+      console.log(obj)
+      if (this.pageNum == this.questionList.length - 1) {
         localStorage.setItem("myGrad", this.myGrad);
         localStorage.setItem("otherGrade", this.otherGrade);
         window.math.onclose = this.onclose;
         this.$router.push({
           path: "end",
-          status: this.myGrad > this.otherGrade ? true : false
+          query:{
+            status: this.myGrad > this.otherGrade ? true : false
+          }
         });
       }
     },
@@ -173,7 +179,7 @@ export default {
       console.log("断开链接");
     },
     getData(type) {
-      if(type){
+      if (type) {
         this.timer = setInterval(this.goTime, 1000);
       }
       let questionList = this.questionList;
@@ -183,11 +189,11 @@ export default {
       this.currentNUm = -1;
       // this.otherResulr = null;
       this.option = null;
-      this.questionId = null;
       this.titles = questionList[this.pageNum].body;
       this.imgSrc = questionList[this.pageNum].bodyPic;
       this.questions = questionList[this.pageNum].questions;
       this.correct = questionList[this.pageNum].result;
+      this.questionId=questionList[this.pageNum].id
     }
   },
   mounted() {
@@ -196,8 +202,8 @@ export default {
     // this.timer = setInterval(this.goTime, 1000);
   },
   beforeDestroy() {
-      this.clearTimer(this.timer);
-    },
+    this.clearTimer(this.timer);
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -289,7 +295,7 @@ export default {
     font-size: 14px;
     img {
       max-width: 100%;
-      max-height: 100%;
+      max-height: 140px;
     }
   }
   &-list {
