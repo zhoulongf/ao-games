@@ -35,7 +35,7 @@
           </div>
           <div class="match-center-center">vs</div>
           <div class="match-center-left">
-            <img :src="otherInfo.opponentLitpicPath ? otherInfo.opponentLitpicPath : defaultSrc" />
+            <img :src="otherInfo.litpicPath ? otherInfo.litpicPath : defaultSrc" />
             <span class="span0">{{otherInfo.opponentName ? otherInfo.opponentName : '***'}}</span>
           </div>
         </div>
@@ -156,6 +156,10 @@ export default {
   },
   mounted() {
     this.getData();
+   let  status= this.$route.query.status
+   if(status){
+     this.beginTime()
+   }
   },
   beforeDestroy() {
     clearInterval(this.timer);

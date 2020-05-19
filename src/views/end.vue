@@ -2,19 +2,19 @@
   <div class="end">
     <div class="end-top" :class="endType ? 'topyes' : 'topno'">
       <div class="jfinfo">
-        <div class="jfinfo-left span2">0</div>
-        <div class="jfinfo-right span2">0</div>
+        <div class="jfinfo-left span2">{{myGrad ? myGrad : 0}}</div>
+        <div class="jfinfo-right span2">{{otherGrade ? otherGrade : 0}}</div>
       </div>
     </div>
     <div class="end-center">
       <div class="end-center-left">
-        <img src="../assets/img/myrecordyes.png" />
-        <span class="span0">微信名称</span>
+        <img :src="myUser.litpicPath ? myUser.litpicPath : defaultHead" />
+        <span class="span0">{{myUser.myName ? myUser.myName : 'xxx'}}</span>
       </div>
       <div class="end-center-center">vs</div>
       <div class="end-center-left">
-        <img src="../assets/img/myrecordyes.png" />
-        <span class="span0">微信名称</span>
+        <img :src="otherInfo.litpicPath ? otherInfo.litpicPath : defaultHead" />
+        <span class="span0">{{otherInfo.opponentName ? otherInfo.opponentName : 'xxx'}}</span>
       </div>
     </div>
     <div class="end-foot again" @click="goclick(1)"></div>
@@ -26,16 +26,29 @@ export default {
   name: "end",
   data() {
     return {
-      endType:false
+      endType: null,
+      myGrad: localStorage.getItem("myGrad"),
+      otherGrade: localStorage.getItem("otherGrade"),
+      otherInfo: JSON.parse(localStorage.getItem("otherInfo")),
+      myUser: JSON.parse(localStorage.getItem("myUser")),
+      defaultHead: require("@/assets/img/head.png")
     };
   },
   methods: {
     goclick(key) {
-      if (key == 2) {
-        this.$router.push({
-          path: "home"
-        });
-      }
+      this.$router.push({
+        path: "home",
+        query:{
+          status:key==1 ? true : false
+        }
+      });
+    }
+  },
+  mounted() {
+    if (this.$route.query.status) {
+      this.endType = this.$route.query.status;
+    } else {
+      this.endType = true;
     }
   }
 };
@@ -55,13 +68,13 @@ export default {
     margin: 0 auto;
     margin-top: 60px;
     position: relative;
-    &.topyes{
+    &.topyes {
       background: url(../assets/img/yes.png) no-repeat center center;
-    background-size: 100% 100%;
+      background-size: 100% 100%;
     }
-    &.topno{
+    &.topno {
       background: url(../assets/img/no.png) no-repeat center center;
-    background-size: 100% 100%;
+      background-size: 100% 100%;
     }
     .jfinfo {
       width: 48%;

@@ -2,7 +2,7 @@
   <div class="match">
     <div class="match-info">
       <div class="match-info-left">
-        <img :src="myUser.myLitpicPath ? myUser.myLitpicPath : defaultHead" />
+        <img :src="myUser.litpicPath ? myUser.litpicPath : defaultHead" />
         <p>{{myUser.myName ? myUser.myName : 'xxx'}}</p>
       </div>
       <div class="match-info-conter">
@@ -11,7 +11,7 @@
         <div class="score-right score-right1 span1">0</div>
       </div>
       <div class="match-info-left">
-        <img :src="otherInfo.opponentLitpicPath ? otherInfo.opponentLitpicPath : defaultHead" />
+        <img :src="otherInfo.litpicPath ? otherInfo.litpicPath : defaultHead" />
         <p>{{otherInfo.opponentName ? otherInfo.opponentName : 'xxx'}}</p>
       </div>
     </div>
@@ -28,7 +28,11 @@
         @click="chooseQuestion(index)"
       >
         <span>{{item}}</span>
-        <img class="correctquestion" v-if="otherStatus == index" :src="otherResulr == item ? srcRight : srcError">
+        <img
+          class="correctquestion"
+          v-if="otherStatus == index"
+          :src="otherResulr == item ? srcRight : srcError"
+        />
         <img
           v-if=" currentNUm==index && corrStatus"
           class="correctquestion"
@@ -47,20 +51,25 @@ export default {
   data() {
     return {
       titles: null,
-      correct: null,//当前题的答案
+      correct: null, //当前题的答案
       imgSrc: null,
       pageNum: 0,
-      corrStatus: 1,//当前答题者是否答对
-      onceClick: false,//每道题只能点击一次
+      corrStatus: null, //当前答题者是否答对
+      onceClick: false, //每道题只能点击一次
       timer: null,
-      currentNUm:-1,//获取当前答题者点击的哪一个选项
-      otherStatus:0,//另一个答题者是否答对
-      otherResulr:'C。adC',//另一个答题者的答案
+      option: null, //当前选择的答案
+      currentNUm: -1, //获取当前答题者点击的哪一个选项
+      otherStatus: 0, //另一个答题者的选项
+      otherResulr: "C", //另一个答题者的答案
+      playUserId:localStorage.getItem('playUserId'),//如果是0 就是机器人
       number: 20,
       questions: [],
+      questionId: null,
+      myGrad: 0,
+      otherGrade: 0,
       otherInfo: JSON.parse(localStorage.getItem("otherInfo")),
-      myUser:JSON.parse(localStorage.getItem("myUser")),
-      questionList:JSON.parse(localStorage.getItem("questionList")),
+      myUser: JSON.parse(localStorage.getItem("myUser")),
+      questionList: JSON.parse(localStorage.getItem("questionList")),
       defaultHead: require("@/assets/img/head.png"),
       srcRight: require("@/assets/img/yesquestion.png"),
       srcError: require("@/assets/img/error.png")
@@ -80,13 +89,15 @@ export default {
     },
     chooseQuestion(key) {
       if (!this.onceClick) {
-        this.currentNUm=key
+        this.currentNUm = key;
+        this.option = item;
         this.onceClick = true;
-        if (this.correct != key) {
+        if (this.correct != item) {
           this.corrStatus = -1;
         } else {
           this.corrStatus = 1;
         }
+        window.math.send({ questionId: this.questionId, option: this.option });
         return false;
       }
     },
@@ -113,20 +124,46 @@ export default {
     onmessage(data) {
       console.log(data);
       let obj = JSON.parse(data.data);
+      this.myGrad = presentGrade;
+      this.otherGrade = opponentUser.grade;
+      //判断两者都答完之后的操作
+      this.clearTimer(this.timer);
+      if (this.pageNum == this.questionList.length - 1) {
+        localStorage.setItem('myGrad',this.myGrad)
+        localStorage.setItem('otherGrade',this.otherGrade)
+         window.ws.onclose = this.onclose;
+        this.$router.push({
+            path: "end",
+            status:true
+          });
+      } else {
+        this.pageNum++;
+        this.getData();
+      }
     },
     onerror(e) {
       console.log(e);
     },
+    onclose(){
+      console.log('断开链接')
+    },
     getData() {
-      let questionList=this.questionList
+      this.beginTime();
+      let questionList = this.questionList;
+      this.corrStatus = null;
+      this.onceClick = false;
+      this.otherStatus = -1;
+      this.currentNUm = -1;
+      this.otherResulr = null;
+      this.option = null;
       this.titles = questionList[this.pageNum].body;
       this.imgSrc = questionList[this.pageNum].bodyPic;
       this.questions = questionList[this.pageNum].questions;
       this.correct = questionList[this.pageNum].result;
+      this.questionId = questionList[this.pageNum].id;
     }
   },
   mounted() {
-    this.beginTime();
     this.getData();
   }
 };
