@@ -28,11 +28,11 @@
         @click="chooseQuestion(index,item)"
       >
         <span>{{item}}</span>
-        <img
+        <!-- <img
           class="correctquestion"
           v-if="otherStatus == index"
           :src="otherResulr == item ? srcRight : srcError"
-        />
+        /> -->
         <img
           v-if=" currentNUm==index && corrStatus"
           class="correctquestion"
@@ -59,8 +59,8 @@ export default {
       timer: null,
       option: null, //当前选择的答案
       currentNUm: -1, //获取当前答题者点击的哪一个选项
-      otherStatus: -1, //另一个答题者的选项
-      otherResulr: null, //另一个答题者的答案
+      // otherStatus: -1, //另一个答题者的选项
+      // otherResulr: null, //另一个答题者的答案
       playUserId: localStorage.getItem("playUserId"), //如果是0 就是机器人
       number: 20,
       questions: [],
@@ -94,13 +94,13 @@ export default {
       } else {
         --this.number;
         if (this.playUserId == 0) {
-          if (this.number === 15) {
-            const randomIntegerInRange = (min, max) =>
-              Math.floor(Math.random() * (max - min + 1)) + min;
-            let mathNumb = randomIntegerInRange(0, this.questions.length - 1);
-            this.otherStatus = mathNumb;
-            this.otherResulr = this.questions[mathNumb];
-          }
+          // if (this.number === 15) {
+          //   const randomIntegerInRange = (min, max) =>
+          //     Math.floor(Math.random() * (max - min + 1)) + min;
+          //   let mathNumb = randomIntegerInRange(0, this.questions.length - 1);
+          //   this.otherStatus = mathNumb;
+          //   this.otherResulr = this.questions[mathNumb];
+          // }
         }
       }
     },
@@ -146,13 +146,17 @@ export default {
       this.timer = setInterval(this.goTime, 1000);
     },
     onmessage(data) {
-      console.log(data);
       let obj = JSON.parse(data.data);
-      this.myGrad = presentGrade;
-      this.otherGrade = opponentUser.grade;
+      this.myGrad = obj.presentGrade;
+      this.otherGrade = obj.opponentUser.grade;
       this.clearTimer(this.timer);
       //判断两者都答完之后的操作
       if (obj.next == true) {
+        this.pageNum++;
+        this.getData(1);
+      }
+      alert(obj.next)
+      if(this.pageNum == this.questionList.length-1){
         localStorage.setItem("myGrad", this.myGrad);
         localStorage.setItem("otherGrade", this.otherGrade);
         window.math.onclose = this.onclose;
@@ -160,9 +164,6 @@ export default {
           path: "end",
           status: this.myGrad > this.otherGrade ? true : false
         });
-      } else {
-        this.pageNum++;
-        this.getData(1);
       }
     },
     onerror(e) {
@@ -178,9 +179,9 @@ export default {
       let questionList = this.questionList;
       this.corrStatus = null;
       this.onceClick = false;
-      this.otherStatus = -1;
+      // this.otherStatus = -1;
       this.currentNUm = -1;
-      this.otherResulr = null;
+      // this.otherResulr = null;
       this.option = null;
       this.questionId = null;
       this.titles = questionList[this.pageNum].body;
