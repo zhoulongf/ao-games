@@ -1,6 +1,6 @@
 <template>
   <div class="end">
-    <div class="end-top" :class="endType ? 'topyes' : 'topno'">
+    <div class="end-top" :class="endType == 'true' ? 'topyes' : 'topno'">
       <div class="jfinfo">
         <div class="jfinfo-left span2">{{myGrad ? myGrad : 0}}</div>
         <div class="jfinfo-right span2">{{otherGrade ? otherGrade : 0}}</div>
@@ -45,10 +45,11 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.status) {
-      this.endType = this.$route.query.status;
+    let status =this.$route.query.status
+    if (status) {
+      this.endType = status
     } else {
-      this.endType = true;
+      this.endType = 'false';
     }
   }
 };

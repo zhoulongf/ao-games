@@ -99,13 +99,23 @@ export default {
       } else {
         --this.number;
         if (this.playUserId == 0) {
-          // if (this.number === 15) {
-          //   const randomIntegerInRange = (min, max) =>
-          //     Math.floor(Math.random() * (max - min + 1)) + min;
-          //   let mathNumb = randomIntegerInRange(0, this.questions.length - 1);
-          //   this.otherStatus = mathNumb;
-          //   this.otherResulr = this.questions[mathNumb];
-          // }
+          if (this.number === 15) {
+            // const randomIntegerInRange = (min, max) =>
+            //   Math.floor(Math.random() * (max - min + 1)) + min;
+            // let mathNumb = randomIntegerInRange(0, this.questions.length - 1);
+            // this.otherStatus = mathNumb;
+            // this.otherResulr = this.questions[mathNumb];
+            let stringInfo = {
+              robot: "robot",
+              questionId: this.questionId,
+              option: null
+            };
+            if (window.math.readyState === 1) {
+              window.math.send(JSON.stringify(stringInfo), res => {
+                console.log(res);
+              });
+            }
+          }
         }
       }
     },
@@ -153,20 +163,21 @@ export default {
       let obj = JSON.parse(data.data);
       this.myGrad = obj.presentGrade;
       this.otherGrade = obj.opponentUser.grade;
-      this.clearTimer(this.timer);
       //判断两者都答完之后的操作
       if (obj.next == true) {
+        this.clearTimer(this.timer);
         this.pageNum++;
         this.getData(1);
       }
-      console.log(obj)
+      console.log(this.otherGrade);
       if (this.pageNum == this.questionList.length - 1) {
+        this.clearTimer(this.timer);
         localStorage.setItem("myGrad", this.myGrad);
         localStorage.setItem("otherGrade", this.otherGrade);
         window.math.onclose = this.onclose;
         this.$router.push({
           path: "end",
-          query:{
+          query: {
             status: this.myGrad > this.otherGrade ? true : false
           }
         });
@@ -193,7 +204,7 @@ export default {
       this.imgSrc = questionList[this.pageNum].bodyPic;
       this.questions = questionList[this.pageNum].questions;
       this.correct = questionList[this.pageNum].result;
-      this.questionId=questionList[this.pageNum].id
+      this.questionId = questionList[this.pageNum].id;
     }
   },
   mounted() {
