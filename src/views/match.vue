@@ -99,7 +99,7 @@ export default {
       } else {
         --this.number;
         if (this.playUserId == 0) {
-          if (this.number === 15) {
+          if (this.number === 10) {
             // const randomIntegerInRange = (min, max) =>
             //   Math.floor(Math.random() * (max - min + 1)) + min;
             // let mathNumb = randomIntegerInRange(0, this.questions.length - 1);
@@ -178,7 +178,7 @@ export default {
         this.$router.push({
           path: "end",
           query: {
-            status: this.myGrad > this.otherGrade ? true : false
+            status: this.myGrad > this.otherGrade ? "true" : "false"
           }
         });
       }
