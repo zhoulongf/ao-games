@@ -39,6 +39,7 @@ export default {
       pageNum: 0,
       currentPage:1,
       titles: null,
+      result:null,
       correct: null,
       corrStatus: -1, //判断答题是否正确
       onceClick: false,
@@ -49,6 +50,7 @@ export default {
   methods: {
     chooseQuestion(item, key) {
       if (!this.onceClick) {
+        this.result=item
         this.onceClick = true;
         if (this.correct != item) {
           Toast("选择不正确");
@@ -59,7 +61,7 @@ export default {
       }
     },
     prex(key) {
-      if (this.corrStatus == -1) {
+      if (!this.result) {
         Toast("请先选题");
         return false;
       }
@@ -86,6 +88,7 @@ export default {
       this.correct = this.list[this.pageNum].result;
       this.corrStatus = false;
       this.onceClick = false;
+      this.result=null
     }
   },
   mounted() {
