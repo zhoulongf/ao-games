@@ -89,10 +89,10 @@ export default {
             questionId: this.questionId,
             option: this.option
           };
-          console.log(window.math.readyState);
+          // console.log(window.math.readyState);
           if (window.math.readyState === 1) {
             window.math.send(JSON.stringify(stringInfo), res => {
-              console.log(res);
+              // console.log(res);
             });
           }
         }
@@ -112,7 +112,7 @@ export default {
             };
             if (window.math.readyState === 1) {
               window.math.send(JSON.stringify(stringInfo), res => {
-                console.log(res);
+                // console.log(res);
               });
             }
           }
@@ -134,10 +134,10 @@ export default {
           questionId: this.questionId,
           option: this.option
         };
-        console.log(window.math.readyState);
+        // console.log(window.math.readyState);
         if (window.math.readyState === 1) {
           window.math.send(JSON.stringify(stringInfo), res => {
-            console.log(res);
+            // console.log(res);
           });
         }
 
@@ -169,7 +169,7 @@ export default {
         this.pageNum++;
         this.getData(1);
       }
-      console.log(this.otherGrade);
+      // console.log(this.otherGrade);
       if (this.pageNum == this.questionList.length - 1) {
         this.clearTimer(this.timer);
         localStorage.setItem("myGrad", this.myGrad);
