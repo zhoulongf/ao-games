@@ -22,6 +22,9 @@
       </div>
       <div class="btn-submit" @click="beginTime"></div>
     </div>
+    <van-popup v-model="popshow" :close-on-click-overlay="false" class="popclass">
+      <div class="mathchloding">匹配中...</div>
+    </van-popup>
     <van-dialog v-model="matchshow" :showConfirmButton="false" class="vantdia">
       <div class="match-dialog">
         <div class="match-top">
@@ -48,8 +51,10 @@
 <script>
 import { homePage, chooseUser } from "@/api/index.js";
 import Vue from "vue";
-import { Dialog, Toast } from "vant";
-Vue.use(Dialog).use(Toast);
+import { Dialog, Toast, Popup } from "vant";
+Vue.use(Dialog)
+  .use(Toast)
+  .use(Popup);
 import MyHeader from "@/components/my-header";
 export default {
   name: "Home",
@@ -59,12 +64,13 @@ export default {
   data() {
     return {
       matchshow: false,
+      popshow: false,
       number: 0,
       timer: null,
       userInfo: {},
-      defaultSrc:require('@/assets/img/head.png'),
-      otherInfo:{},
-      myUser:{},
+      defaultSrc: require("@/assets/img/head.png"),
+      otherInfo: {},
+      myUser: {},
       list: [
         require("../assets/img/ph.png"),
         require("../assets/img/tk.png"),
@@ -74,6 +80,7 @@ export default {
   },
   methods: {
     beginTime() {
+      this.popshow = true;
       if (typeof WebSocket === "undefined") {
         alert("您的浏览器不支持socket");
       }
@@ -85,18 +92,19 @@ export default {
       window.ws.onerror = this.onerror;
     },
     onopen(e) {
-      console.log('连接成功')
+      console.log("连接成功");
+      this.popshow = false;
       this.matchshow = true;
       this.timer = setInterval(this.goTime, 1000);
     },
     onmessage(data) {
       let obj = JSON.parse(data.data);
-      this.otherInfo=obj.opponentUser
-      this.myUser=obj.myUser
-      localStorage.setItem('otherInfo',JSON.stringify(this.otherInfo))
-      localStorage.setItem('myUser',JSON.stringify(this.myUser))
-      localStorage.setItem('questionList',JSON.stringify(obj.questionList))
-      localStorage.setItem('playUserId',obj.playUserId)
+      this.otherInfo = obj.opponentUser;
+      this.myUser = obj.myUser;
+      localStorage.setItem("otherInfo", JSON.stringify(this.otherInfo));
+      localStorage.setItem("myUser", JSON.stringify(this.myUser));
+      localStorage.setItem("questionList", JSON.stringify(obj.questionList));
+      localStorage.setItem("playUserId", obj.playUserId);
       Toast({
         message: "匹配成功",
         onOpened: () => {
@@ -143,8 +151,8 @@ export default {
       this.clearTimer();
       this.matchshow = false;
     },
-    onclose(){
-      console.log('断开链接')
+    onclose() {
+      console.log("断开链接");
     },
     getData() {
       homePage().then(res => {
@@ -156,10 +164,10 @@ export default {
   },
   mounted() {
     this.getData();
-   let  status= this.$route.query.status
-   if(status){
-     this.beginTime()
-   }
+    let status = this.$route.query.status;
+    if (status) {
+      this.beginTime();
+    }
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -299,6 +307,14 @@ export default {
       background-size: contain;
       cursor: pointer;
     }
+  }
+  .popclass {
+    width: 80%;
+    height: 100px;
+    font-size: 20px;
+    font-weight: bolder;
+    text-align: center;
+    line-height: 100px;
   }
 }
 </style>
