@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :style="{backgroundImage: 'url(' + (userInfo.picUrl ? userInfo.picUrl : baseImg) + ')', backgroundSize:'100% 100%', backgroundRepeat: 'no-repeat'}">
     <div class="home-content">
       <div class="home-content-top">
         <div class="imgSrc">
@@ -17,9 +17,9 @@
           @click="goTo(item,index)"
         />
       </div>
-      <div class="content-img">
+      <!-- <div class="content-img">
         <img :src="userInfo.picUrl" />
-      </div>
+      </div> -->
       <div class="btn-submit" @click="beginTime"></div>
     </div>
     <van-popup v-model="popshow" :close-on-click-overlay="false" class="popclass">
@@ -68,6 +68,7 @@ export default {
       number: 0,
       timer: null,
       userInfo: {},
+      baseImg:require('@/assets/img/homebg.jpg'),
       defaultSrc: require("@/assets/img/head.png"),
       otherInfo: {},
       myUser: {},
@@ -85,7 +86,8 @@ export default {
         alert("您的浏览器不支持socket");
       }
       window.ws = new WebSocket(
-        "ws://192.168.10.2:8123/websocket/" + localStorage.getItem("token")
+        // "ws://192.168.10.2:8123/websocket/" + localStorage.getItem("token")
+        "ws://localhost:8123/websocket/" + localStorage.getItem("token")
       );
       window.ws.onopen = this.onopen;
       window.ws.onmessage = this.onmessage;
@@ -125,10 +127,7 @@ export default {
         });
       } else if (key == 1) {
         this.$router.push({
-          path: "question",
-          query: {
-            id: key
-          }
+          path: "question"
         });
       } else if (key == 2) {
         Dialog.alert({
@@ -165,12 +164,15 @@ export default {
   mounted() {
     this.getData();
     let status = this.$route.query.status;
-    if (status) {
+    if (status == 'true') {
       this.beginTime();
     }
   },
   beforeDestroy() {
     clearInterval(this.timer);
+    if(window.wx){
+      window.ws.onclose = this.onclose;
+    }
   }
 };
 </script>
@@ -181,7 +183,10 @@ export default {
 </style>
 <style lang="scss" scoped>
 .home {
+  display: flex;
+  height: 100%;
   &-content {
+    height: 100vh;
     &-top {
       width: 92%;
       height: 100px;
@@ -241,10 +246,11 @@ export default {
       }
     }
     .btn-submit {
+      position: absolute;
+      left: 30%;
+      bottom: 50px;
       width: 40%;
-      height: 50px;
-      margin: 0 auto;
-      margin-top: 20px;
+      height: 80px;
       background: url(../assets/img/dt.png) no-repeat center center;
       background-size: contain;
       cursor: pointer;

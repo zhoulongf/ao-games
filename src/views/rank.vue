@@ -18,7 +18,7 @@
           <img :src="item.litpicPath" alt="暂无图片" />
           <div>
             <p class="span0 omit">{{item.nickName}}</p>
-            <p class="span2">本日积分：{{item.border ? item.border : 0}}分</p>
+            <p class="span2">{{activeIndex == 0 ? '本日积分' : (activeIndex == 1 ? '本周积分' : '总积分')}}：{{item.border ? item.border : 0}}分</p>
           </div>
         </div>
         <div class="item-right omit">
@@ -32,7 +32,7 @@
         <img :src="myInfo.litpicPath" alt="暂无图片" />
         <div>
           <p class="span0 omit">{{myInfo.nickName ? myInfo.nickName : '***'}}</p>
-          <p class="span2">本日积分：{{myInfo.dayBorder ? myInfo.dayBorder : 0}}分</p>
+          <p class="span2">{{integraltext}}</p>
         </div>
       </div>
       <div class="info-right">
@@ -40,17 +40,19 @@
           <img :src="myInfo.levelPic ? myInfo.levelPic : defaultsrc" />
           <span class="span0 omit">{{myInfo.level ? myInfo.level : '--'}}</span>
         </div>
-        <p class="span2">本日排名：{{myInfo.dayRanking ? myInfo.dayRanking : '*'}}分</p>
+        <p class="span2">{{rankText}}</p>
       </div>
     </div>
     <div class="rank-bottom">
-      <p class="rank-top span0">进入排行榜前N名，可获取影票N张</p>
+      <p class="rank-top">
+        <span class="span0" v-show="activeIndex !=2">进入排行榜前{{rankNum}}名，可获取影票{{ticketNum}}张</span>  
+      </p>
       <div class="foot-bottom">
         <span class="span0" @click="gzclick">游戏规则</span>
         <span class="span0" @click="goRecord">获奖记录</span>
       </div>
     </div>
-    <div class="rigtFix" @click="gomyRecord"></div>
+    <div class="rigtFix" v-if="myInfo.isAward" @click="gomyRecord"></div>
     <van-dialog v-model="gzshow" title="游戏规则">
       <div class="gz-dialog">
         {{myInfo.rankingRule ? myInfo.rankingRule : '暂无规则'}}
@@ -68,7 +70,11 @@ export default {
   data() {
     return {
       activeIndex: 0,
+      integraltext:null,
+      rankText:null,
       gzshow:false,
+      rankNum:0,
+      ticketNum:0,
       list: [],
       allList:[],
       myInfo:{},
@@ -85,6 +91,7 @@ export default {
       }else{
         this.list=JSON.parse(JSON.stringify(this.allList.all))
       }
+      this.textSelect(index)
     },
     goRecord(){
       this.$router.push({
@@ -99,12 +106,35 @@ export default {
     gzclick(){
       this.gzshow=true
     },
+    textSelect(key){
+      switch(key){
+        case 0:
+          this.integraltext=`本日积分：${this.myInfo.dayBorder ? this.myInfo.dayBorder : 0}分`;
+          this.rankText=`本日排名：${this.myInfo.dayBorder ? this.myInfo.dayRanking : '**' }名`;
+          this.rankNum =this.myInfo.topFrewDay ? this.myInfo.topFrewDay : '**'
+          this.ticketNum = this.myInfo.awardDay ? this.myInfo.awardDay : '**'
+          break;
+        case 1:
+          this.integraltext=`本周积分：${this.myInfo.weekBorder ? this.myInfo.weekBorder : 0}分`;
+          this.rankText=`本周排名：${this.myInfo.weekRanking ? this.myInfo.weekRanking : 0}分`;
+          this.rankNum =this.myInfo.topFrewWeek ? this.myInfo.topFrewWeek : '**'
+          this.ticketNum = this.myInfo.awardWeek ? this.myInfo.awardWeek : '**'
+          break;
+        case 2:
+          this.integraltext=`总积分${this.myInfo.allBorder ? this.myInfo.allBorder : 0}分`;
+          this.rankText=`总排名${this.myInfo.allRanking ? this.myInfo.allRanking : 0}分`;
+          this.rankNum ="**"
+          this.ticketNum = '**'
+          break;
+      }
+    },
     getData(){
       ranking().then(res =>{
         if(res.code =='00000'){
           this.allList=res.data
           this.list=res.data.day
           this.myInfo=res.data.myInfo
+          this.textSelect(0)
         }
       })
     }
@@ -257,6 +287,7 @@ export default {
     .rank-top{
       margin-top:10px;
       text-align: center;
+      height: 20px;
     }
     .foot-bottom{
       width: 80%;

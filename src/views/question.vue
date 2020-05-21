@@ -8,12 +8,11 @@
       <div
         class="question-list-item"
         v-for="(item,index) in questions"
-        @click="chooseQuestion(item,index)"
         :key="index"
       >
         <span>{{item}}</span>
         <img
-          v-if="correct == item && (corrStatus && corrStatus !=-1)"
+          v-if="correct == item"
           class="correctquestion"
           src="../assets/img/yesquestion.png"
         />
@@ -61,10 +60,10 @@ export default {
       }
     },
     prex(key) {
-      if (!this.result) {
-        Toast("请先选题");
-        return false;
-      }
+      // if (!this.result) {
+      //   Toast("请先选题");
+      //   return false;
+      // }
       if (key == 2) {
         if (this.pageNum < this.list.length - 1) {
           this.pageNum++;

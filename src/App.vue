@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       headerInfo: {
-        title: "小游戏"
+        title: "一汽-大众奥迪车主互动游戏"
       }
     };
   },

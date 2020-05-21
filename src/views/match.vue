@@ -150,7 +150,8 @@ export default {
         alert("您的浏览器不支持socket");
       }
       window.math = new WebSocket(
-        "ws://192.168.10.2:8123/question/" + localStorage.getItem("token")
+        // "ws://192.168.10.2:8123/question/" + localStorage.getItem("token")
+        "ws://localhost:8123/question/" + localStorage.getItem("token")
       );
       window.math.onopen = this.onopen;
       window.math.onmessage = this.onmessage;
