@@ -3,7 +3,7 @@
     <div class="match-info">
       <div class="match-info-left">
         <img :src="myUser.litpicPath ? myUser.litpicPath : defaultHead" />
-        <p>{{myUser.myName ? myUser.myName : 'xxx'}}</p>
+        <p>{{myUser.nickname ? myUser.nickname : 'xxx'}}</p>
       </div>
       <div class="match-info-conter">
         <div class="score-left score-left1 span1">{{myGrad}}</div>
@@ -12,10 +12,10 @@
       </div>
       <div class="match-info-left">
         <img :src="otherInfo.litpicPath ? otherInfo.litpicPath : defaultHead" />
-        <p>{{otherInfo.opponentName ? otherInfo.opponentName : 'xxx'}}</p>
+        <p>{{otherInfo.nickname ? otherInfo.nickname : 'xxx'}}</p>
       </div>
     </div>
-    <div class="match-answer">问题{{pageNum+1}}/{{questionList.length}}</div>
+    <div class="match-answer">问题{{currentPage}}/{{questionList.length}}</div>
     <div class="match-top">
       <span>{{titles}}</span>
       <img v-if="imgSrc" :src="imgSrc" />
@@ -53,6 +53,7 @@ export default {
       titles: null,
       correct: null, //当前题的答案
       imgSrc: null,
+      currentPage: 1,
       pageNum: 0,
       corrStatus: null, //当前答题者是否答对
       onceClick: false, //每道题只能点击一次
@@ -164,13 +165,14 @@ export default {
       this.myGrad = obj.presentGrade;
       this.otherGrade = obj.opponentUser.grade;
       //判断两者都答完之后的操作
-      if (obj.next == true) {
-        this.clearTimer(this.timer);
-        this.pageNum++;
-        this.getData(1);
-      }
-      // console.log(this.otherGrade);
-      if (this.pageNum == this.questionList.length - 1) {
+      if (this.pageNum < this.questionList.length - 1) {
+        if (obj.next == true) {
+          this.clearTimer(this.timer);
+          this.pageNum++;
+          this.currentPage += 1;
+          this.getData(1);
+        }
+      } else {
         this.clearTimer(this.timer);
         localStorage.setItem("myGrad", this.myGrad);
         localStorage.setItem("otherGrade", this.otherGrade);
@@ -182,6 +184,9 @@ export default {
           }
         });
       }
+
+      // if (this.pageNum == this.questionList.length) {
+      // }
     },
     onerror(e) {
       console.log(e);

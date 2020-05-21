@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="item-right omit">
-          <img src="../assets/img/rankdw.png" alt="暂无图片" />
+          <img :src="item.levelPic ? item.levelPic : defaultsrc" alt="暂无图片" />
           <span class="span0">{{item.level ? item.level : '--'}}</span>
         </div>
       </div>
@@ -37,7 +37,7 @@
       </div>
       <div class="info-right">
         <div class="right-top">
-          <img src="myInfo.levelPic" alt="暂无图片" />
+          <img :src="myInfo.levelPic ? myInfo.levelPic : defaultsrc" />
           <span class="span0 omit">{{myInfo.level ? myInfo.level : '--'}}</span>
         </div>
         <p class="span2">本日排名：{{myInfo.dayRanking ? myInfo.dayRanking : '*'}}分</p>
@@ -71,7 +71,8 @@ export default {
       gzshow:false,
       list: [],
       allList:[],
-      myInfo:{}
+      myInfo:{},
+      defaultsrc:require('@/assets/img/rankdw.png')
     };
   },
   methods: {
@@ -234,6 +235,7 @@ export default {
       img {
         width: 40px;
         height: 40px;
+        border-radius: 50%;
       }
     }
     .info-right {
@@ -241,8 +243,8 @@ export default {
       .right-top {
         margin-top: 10px;
         img {
-          width: 14px;
-          height: 14px;
+          width: 16px;
+          height: 16px;
         }
       }
     }
@@ -284,6 +286,7 @@ export default {
     width: 92%;
     height: auto;
     margin: 20px auto;
+    text-align: center;
   }
 }
 </style>

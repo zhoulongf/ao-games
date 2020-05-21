@@ -3,7 +3,7 @@
     <div class="home-content">
       <div class="home-content-top">
         <div class="imgSrc">
-          <img :src="userInfo.picUrl" />
+          <img :src="userInfo.litpicPath" />
         </div>
         <div class="infoNub info-left">{{userInfo.border ? userInfo.border : 0}}</div>
         <div class="infoNub info-right">{{userInfo.level ? userInfo.level : '***'}}</div>
@@ -18,7 +18,7 @@
         />
       </div>
       <div class="content-img">
-        <img :src="userInfo.picUrl" alt="暂无图片" />
+        <img :src="userInfo.picUrl" />
       </div>
       <div class="btn-submit" @click="beginTime"></div>
     </div>
@@ -33,7 +33,7 @@
         </div>
         <div class="match-center">
           <div class="match-center-left">
-            <img :src="userInfo.picUrl" />
+            <img :src="userInfo.litpicPath" />
             <span class="span0">{{userInfo.nickName}}</span>
           </div>
           <div class="match-center-center">vs</div>
@@ -149,7 +149,7 @@ export default {
     closematch() {
       window.ws.onclose = this.onclose;
       this.clearTimer();
-      this.matchshow = false;
+      this.matchshow=false
     },
     onclose() {
       console.log("断开链接");
