@@ -1,6 +1,6 @@
 import request from '../utils/axios'
 // let apiUrl=`https://cs.jumizc.com`
-let apiUrl=`localhost:8123`
+let apiUrl=`http://47.110.91.228:8123`
 export function audirequest(params) {
     //授权
     return request({

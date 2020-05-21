@@ -87,7 +87,7 @@ export default {
       }
       window.ws = new WebSocket(
         // "ws://192.168.10.2:8123/websocket/" + localStorage.getItem("token")
-        "ws://localhost:8123/websocket/" + localStorage.getItem("token")
+        "ws://47.110.91.228:8123/websocket/" + localStorage.getItem("token")
       );
       window.ws.onopen = this.onopen;
       window.ws.onmessage = this.onmessage;
