@@ -1,21 +1,13 @@
 <template>
   <div class="question">
     <div class="question-top">
-      <div>{{titles}}</div>
+      <div :class="titles && titles.length<20 ? 'centers' : null">{{titles}}</div>
       <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="question-list">
-      <div
-        class="question-list-item"
-        v-for="(item,index) in questions"
-        :key="index"
-      >
-        <span>{{item}}</span>
-        <img
-          v-if="correct == item"
-          class="correctquestion"
-          src="../assets/img/yesquestion.png"
-        />
+      <div class="question-list-item" v-for="(item,index) in questions" :key="index">
+        <span :class="item.length < 16 ? 'centers' : null">{{item}}</span>
+        <img v-if="correct == item" class="correctquestion" src="../assets/img/yesquestion.png" />
       </div>
     </div>
     <div class="question-foot">
@@ -36,9 +28,9 @@ export default {
     return {
       imgSrc: null,
       pageNum: 0,
-      currentPage:1,
+      currentPage: 1,
       titles: null,
-      result:null,
+      result: null,
       correct: null,
       corrStatus: -1, //判断答题是否正确
       onceClick: false,
@@ -49,7 +41,7 @@ export default {
   methods: {
     chooseQuestion(item, key) {
       if (!this.onceClick) {
-        this.result=item
+        this.result = item;
         this.onceClick = true;
         if (this.correct != item) {
           Toast("选择不正确");
@@ -67,7 +59,7 @@ export default {
       if (key == 2) {
         if (this.pageNum < this.list.length - 1) {
           this.pageNum++;
-          this.currentPage +=1
+          this.currentPage += 1;
         } else {
           Toast("已经是最后一题了");
           return false;
@@ -75,7 +67,7 @@ export default {
       } else {
         if (this.pageNum > 0) {
           this.pageNum--;
-          this.currentPage -=1;
+          this.currentPage -= 1;
         } else {
           Toast("已经是第一题了");
           return false;
@@ -87,7 +79,7 @@ export default {
       this.correct = this.list[this.pageNum].result;
       this.corrStatus = false;
       this.onceClick = false;
-      this.result=null
+      this.result = null;
     }
   },
   mounted() {
@@ -110,6 +102,9 @@ export default {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  .centers {
+    text-align: center;
+  }
   &-top {
     width: 96%;
     height: 180px;
@@ -149,9 +144,9 @@ export default {
       position: relative;
       .correctquestion {
         position: absolute;
-        width: 32px;
+        width: 30px;
         height: 24px;
-        right: -5px;
+        right: 5px;
         top: -10px;
       }
     }

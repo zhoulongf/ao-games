@@ -17,7 +17,7 @@
     </div>
     <div class="match-answer">问题{{currentPage}}/{{questionList.length}}</div>
     <div class="match-top">
-      <span>{{titles}}</span>
+      <span :class="titles && titles.length<20 ? 'centers' : null">{{titles}}</span>
       <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="match-list">
@@ -27,7 +27,7 @@
         :key="index"
         @click="chooseQuestion(index,item)"
       >
-        <span>{{item}}</span>
+        <span :class="item.length < 16 ? 'centers' : null">{{item}}</span>
         <!-- <img
           class="correctquestion"
           v-if="otherStatus == index"
@@ -230,6 +230,9 @@ export default {
   height: 100%;
   position: relative;
   overflow: hidden;
+  .centers{
+    text-align: center;
+  }
   &-info {
     width: 96%;
     margin: 0 auto;
@@ -337,9 +340,9 @@ export default {
       position: relative;
       .correctquestion {
         position: absolute;
-        width: 32px;
+        width: 30px;
         height: 24px;
-        right: -5px;
+        right: 5px;
         top: -10px;
       }
     }
