@@ -69,7 +69,7 @@ export default {
       timer: null,
       userInfo: {},
       baseImg:require('@/assets/img/homebg.jpg'),
-      defaultSrc: require("@/assets/img/head.png"),
+      defaultSrc: require("@/assets/img/gif1.gif"),
       otherInfo: {},
       myUser: {},
       list: [

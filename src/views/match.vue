@@ -169,9 +169,11 @@ export default {
       if (this.pageNum < this.questionList.length - 1) {
         if (obj.next == true) {
           this.clearTimer(this.timer);
-          this.pageNum++;
-          this.currentPage += 1;
-          this.getData(1);
+          setTimeout(() => {
+            this.pageNum++;
+            this.currentPage += 1;
+            this.getData(1);
+          },2000);
         }
       } else {
         this.clearTimer(this.timer);

@@ -9,12 +9,12 @@
     <div class="end-center">
       <div class="end-center-left">
         <img :src="myUser.litpicPath ? myUser.litpicPath : defaultHead" />
-        <span class="span0">{{myUser.myName ? myUser.myName : 'xxx'}}</span>
+        <span class="span0">{{myUser.nickname ? myUser.nickname : 'xxx'}}</span>
       </div>
       <div class="end-center-center">vs</div>
       <div class="end-center-left">
         <img :src="otherInfo.litpicPath ? otherInfo.litpicPath : defaultHead" />
-        <span class="span0">{{otherInfo.opponentName ? otherInfo.opponentName : 'xxx'}}</span>
+        <span class="span0">{{otherInfo.nickname ? otherInfo.nickname : 'xxx'}}</span>
       </div>
     </div>
     <div class="end-foot again" @click="goclick(1)"></div>
