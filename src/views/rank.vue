@@ -55,7 +55,9 @@
     <div class="rigtFix" v-if="myInfo.isAward" @click="gomyRecord"></div>
     <van-dialog v-model="gzshow" title="影票赢取规则及说明">
       <div class="gz-dialog">
-        {{myInfo.rankingRule ? myInfo.rankingRule : '--'}}
+        <img v-if='myInfo.flowPic' :src='myInfo.flowPic' />
+        <!-- <img v-if='myInfo.flowPic' :src='myInfo.flowPic' /> -->
+        <span v-else>--</span>
       </div>
     </van-dialog>
   </div>
@@ -318,6 +320,10 @@ export default {
     height: auto;
     margin: 20px auto;
     text-align: center;
+    img{
+      width:80%;
+      height:200px;
+    }
   }
 }
 </style>
