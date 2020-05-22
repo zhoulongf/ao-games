@@ -26,6 +26,7 @@
         v-for="(item,index) in questions"
         :key="index"
         @click="chooseQuestion(index,item)"
+        :class="corrStatus && currentNUm==index ? (correct == item ? 'yesClass' : 'noClass') :  null"
       >
         <span :class="item.length < 16 ? 'centers' : null">{{item}}</span>
         <!-- <img
@@ -74,8 +75,8 @@ export default {
       myUser: JSON.parse(localStorage.getItem("myUser")),
       questionList: JSON.parse(localStorage.getItem("questionList")),
       defaultHead: require("@/assets/img/head.png"),
-      srcRight: require("@/assets/img/yesquestion.png"),
-      srcError: require("@/assets/img/error.png")
+      srcRight: require("@/assets/img/yes1.png"),
+      srcError: require("@/assets/img/error1.png")
     };
   },
   methods: {
@@ -175,7 +176,7 @@ export default {
             this.pageNum++;
             this.currentPage += 1;
             this.getData(1);
-          },2000);
+          }, 2000);
         }
       } else {
         this.clearTimer(this.timer);
@@ -232,7 +233,7 @@ export default {
   height: 100%;
   position: relative;
   overflow: hidden;
-  .centers{
+  .centers {
     text-align: center;
   }
   &-info {
@@ -342,10 +343,18 @@ export default {
       position: relative;
       .correctquestion {
         position: absolute;
-        width: 30px;
-        height: 24px;
-        right: 5px;
-        top: -10px;
+        width: 24px;
+        height: 20px;
+        right: 20px;
+        top: 15px;
+      }
+      &.yesClass {
+        background: url(../assets/img/yes01.png) no-repeat center center;
+        background-size: 100% 100%;
+      }
+      &.noClass {
+        background: url(../assets/img/no01.png) no-repeat center center;
+        background-size: 100% 100%;
       }
     }
   }

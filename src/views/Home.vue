@@ -1,5 +1,8 @@
 <template>
-  <div class="home" :style="{backgroundImage: 'url(' + (userInfo.picUrl ? userInfo.picUrl : baseImg) + ')', backgroundSize:'100% 100%', backgroundRepeat: 'no-repeat'}">
+  <div
+    class="home"
+    :style="{backgroundImage: 'url(' + (userInfo.picUrl ? userInfo.picUrl : baseImg) + ')', backgroundSize:'100% 100%', backgroundRepeat: 'no-repeat'}"
+  >
     <div class="home-content">
       <div class="home-content-top">
         <div class="imgSrc">
@@ -19,7 +22,7 @@
       </div>
       <!-- <div class="content-img">
         <img :src="userInfo.picUrl" />
-      </div> -->
+      </div>-->
       <div class="btn-submit" @click="beginTime"></div>
     </div>
     <van-popup v-model="popshow" :close-on-click-overlay="false" class="popclass">
@@ -70,7 +73,7 @@ export default {
       number: 0,
       timer: null,
       userInfo: {},
-      baseImg:require('@/assets/img/homebg.jpg'),
+      baseImg: require("@/assets/img/homebg.jpg"),
       defaultSrc: require("@/assets/img/gif1.gif"),
       otherInfo: {},
       myUser: {},
@@ -94,6 +97,14 @@ export default {
       window.ws.onopen = this.onopen;
       window.ws.onmessage = this.onmessage;
       window.ws.onerror = this.onerror;
+      let stringInfo = {
+        status: 'open'
+      };
+      if (window.ws.readyState === 1) {
+        window.ws.send(JSON.stringify(stringInfo), res => {
+          // console.log(res);
+        });
+      }
     },
     onopen(e) {
       console.log("连接成功");
@@ -148,13 +159,20 @@ export default {
       this.number = 0;
     },
     closematch() {
+      let stringInfo = {
+        status: 'close'
+      };
+      if (window.ws.readyState === 1) {
+        window.ws.send(JSON.stringify(stringInfo), res => {
+          // console.log(res);
+        });
+      }
       window.ws.onclose = this.onclose;
       this.clearTimer();
-      this.matchshow=false
+      this.matchshow = false;
     },
     onclose() {
       console.log("断开链接");
-      window.ws.close()
     },
     getData() {
       homePage().then(res => {
@@ -167,13 +185,21 @@ export default {
   mounted() {
     this.getData();
     let status = this.$route.query.status;
-    if (status == 'true') {
+    if (status == "true") {
       this.beginTime();
     }
   },
   beforeDestroy() {
     clearInterval(this.timer);
-    if(window.ws){
+    if (window.ws) {
+      let stringInfo = {
+        type: 1
+      };
+      if (window.ws.readyState === 1) {
+        window.ws.send(JSON.stringify(stringInfo), res => {
+          // console.log(res);
+        });
+      }
       window.ws.onclose = this.onclose;
     }
   }

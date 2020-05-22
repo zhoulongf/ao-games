@@ -146,10 +146,10 @@ export default {
       position: relative;
       .correctquestion {
         position: absolute;
-        width: 30px;
+        width: 28px;
         height: 24px;
-        right: 5px;
-        top: -10px;
+        right: 20px;
+        top: 15px;
       }
     }
   }
