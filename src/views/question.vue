@@ -5,9 +5,9 @@
       <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="question-list">
-      <div class="question-list-item" v-for="(item,index) in questions" :key="index">
+      <div class="question-list-item" :class="correct == item ? 'yescalss' : null" v-for="(item,index) in questions" :key="index">
         <span :class="item.length < 16 ? 'centers' : null">{{item}}</span>
-        <img v-if="correct == item" class="correctquestion" src="../assets/img/yesquestion.png" />
+        <img v-if="correct == item" class="correctquestion" src="../assets/img/yes1.png" />
       </div>
     </div>
     <div class="question-foot">
@@ -131,9 +131,9 @@ export default {
     margin: 10px auto;
     overflow: hidden;
     &-item {
+      box-sizing: border-box;
       margin-top: 10px;
-      min-height: 60px;
-      padding: 0 20px;
+      padding: 20px;
       background: url(../assets/img/answer.png) no-repeat center center;
       background-size: 100% 100%;
       display: flex;
@@ -146,10 +146,15 @@ export default {
       position: relative;
       .correctquestion {
         position: absolute;
-        width: 28px;
-        height: 24px;
-        right: 20px;
-        top: 15px;
+        width: 24px;
+        height: 20px;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+      }
+      &.yescalss{
+        background: url(../assets/img/yes01.png) no-repeat center center;
+        background-size: 100% 100%;
       }
     }
   }

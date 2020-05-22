@@ -36,7 +36,7 @@
         />-->
         <img
           v-if=" currentNUm==index && corrStatus"
-          class="correctquestion"
+          class="correctquestion" :class="correct == item ? null : 'errorclass'"
           :src="correct == item ? srcRight : srcError"
         />
       </div>
@@ -328,9 +328,9 @@ export default {
     margin: 20px auto;
     overflow: hidden;
     &-item {
+      box-sizing: border-box;
       margin-top: 20px;
-      min-height: 60px;
-      padding: 0 20px;
+      padding: 20px;
       background: url(../assets/img/answer.png) no-repeat center center;
       background-size: 100% 100%;
       display: flex;
@@ -345,8 +345,12 @@ export default {
         position: absolute;
         width: 24px;
         height: 20px;
-        right: 20px;
-        top: 15px;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        &.errorclass{
+          width: 20px;
+        }
       }
       &.yesClass {
         background: url(../assets/img/yes01.png) no-repeat center center;
