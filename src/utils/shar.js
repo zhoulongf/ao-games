@@ -10,7 +10,7 @@ export const shartMessage={
             signature:null,
             sharetitle:'“奥”视群雄奥迪知识大挑战',
             sharedesc: '拼知识、拼速度、赢奖品，测测谁是奥迪真爱粉。',
-            shareimg:require('@/assets/img/shar.jpeg'),
+            shareimg:'https://jumifinance.oss-cn-hangzhou.aliyuncs.com/jumifinance/uploadFile/images/configManager/20200522000527368735.jpeg',
             shartUrl:'http://dati.jupaiaction.com/?from=singlemessage#/home'
         }
     },
@@ -27,7 +27,7 @@ export const shartMessage={
                         timestamp:data.timestamp,
                         nonceStr:data.noncestr,
                         signature:data.signature,
-                        jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+                        jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline']
                     });
                     wx.ready(function () {
                     //     wx.onMenuShareQQ({
@@ -42,7 +42,7 @@ export const shartMessage={
                         title: _this.sharetitle,
                         desc: _this.sharedesc,
                         link: _this.shartUrl,
-                        imgUrl: _this.shareimg,
+                        imgUrl: 'http://jumijupai.oss-cn-beijing.aliyuncs.com/jupai/1590132550942.jpg',
                         success: function () { },
                         cancel: function () { }
                     })
@@ -50,7 +50,7 @@ export const shartMessage={
                         title: _this.sharetitle,
                         desc: _this.sharedesc,
                         link: _this.shartUrl,
-                        imgUrl: _this.shareimg,
+                        imgUrl: 'http://jumijupai.oss-cn-beijing.aliyuncs.com/jupai/1590132550942.jpg',
                         success: function () { },
                         cancel: function () { }
                     });

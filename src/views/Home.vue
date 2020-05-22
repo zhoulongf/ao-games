@@ -154,6 +154,7 @@ export default {
     },
     onclose() {
       console.log("断开链接");
+      window.ws.close()
     },
     getData() {
       homePage().then(res => {
@@ -172,7 +173,7 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.timer);
-    if(window.wx){
+    if(window.ws){
       window.ws.onclose = this.onclose;
     }
   }
