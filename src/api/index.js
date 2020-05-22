@@ -84,10 +84,10 @@ export function getQuestionList(params) {
     })
 }
 export function weixinauth() {
-    //领取奖励
+    //分享
     return request({
         url: apiUrl+`/weixinauth/initjs`,
         method: 'post',
-        params:{url:'http://dati.jupaiaction.com/?from=singlemessage#/home'}
+        params:{url:location.href.split('#')[0]}
     })
 }
