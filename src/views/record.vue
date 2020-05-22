@@ -6,9 +6,9 @@
           class="record-item"
           v-for="(item,index) in 2"
           :key="index"
-          :class="[activeIndex == index ? `item${index}` : null,index == 1 ? 'itemLast' : null]"
+          :class="[activeIndex == index ? 'activeitems' : null,index == 1 ? 'itemLast' : null]"
           @click="phClick(index)"
-        ></div>
+        >{{index == 0 ? '日排行奖励' : '周排行榜奖励'}}</div>
       </div>
       <div class="record-titles">
         <span class="span0">用户</span>
@@ -85,28 +85,39 @@ export default {
     width: 92%;
     height: auto;
     margin: 20px auto;
-    background: url(../assets/img/234.png) no-repeat center center;
+    background: url(../assets/img/13.png) no-repeat center center;
     background-size: 100% 100%;
     position: relative;
     &-list {
       display: flex;
       justify-content: space-around;
+      border-bottom:4px solid #B0DBDD;
       .record-item {
         width: 50%;
         height: 38px;
         cursor: pointer;
+        text-align:center;
+        line-height:38px;
+        color:#fff;
+        font-size:14px;
+        font-weight: bolder;
         &.itemLast {
           width: 48%;
           margin-right: 8px;
         }
-        &.item0 {
-          background: url(../assets/img/recordday.png) no-repeat center center;
-          background-size: 100% 100%;
+        &.activeitems{
+          background:#B0DDDF;
+          border-top-left-radius:10px;
+          border-top-right-radius:10px;
         }
-        &.item1 {
-          background: url(../assets/img/recordweek.png) no-repeat center center;
-          background-size: 100% 100%;
-        }
+        // &.item0 {
+        //   background: url(../assets/img/recordday.png) no-repeat center center;
+        //   background-size: 100% 100%;
+        // }
+        // &.item1 {
+        //   background: url(../assets/img/recordweek.png) no-repeat center center;
+        //   background-size: 100% 100%;
+        // }
       }
     }
     &-titles {
@@ -139,8 +150,8 @@ export default {
         justify-content: space-around;
         align-items: center;
         padding: 10px 0;
-        border-top: 1px solid #fff;
-        border-bottom: 1px solid #fff;
+        border-top: 1px solid #B0DBDD;
+        border-bottom: 1px solid #B0DBDD;
         text-align: center;
         div:nth-child(1) {
           flex: 3;

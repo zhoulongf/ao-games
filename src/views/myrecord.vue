@@ -125,11 +125,12 @@ export default {
       this.activeIndex = index;
     },
     infoClick(item) {
+      this.id = item.id ? item.id : null;
       if (item.isGet == 1) {
         this.conversion = item.award ? item.award.split(",") : [];
-        this.id = item.id ? item.id : null;
         this.lookma = true;
       } else if (item.isGet == 0) {
+        alert(this.id)
         // this.lookma=true
         // this.receive=false
         this.phoneDia = true;
