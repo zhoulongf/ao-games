@@ -16,9 +16,9 @@ export const shartMessage={
     },
     methods:{
         getMessage(){
-            console.log(window.location.href)
             weixinauth().then(res =>{
                 if(res.code == '00000' && res.code){
+                    let _this =this
                     this.shartInfo =res.data
                     let data=res.data
                     wx.config({
@@ -39,18 +39,18 @@ export const shartMessage={
                     //     cancel: function () { }
                     // });
                     wx.onMenuShareTimeline({
-                        title: this.sharetitle,
-                        desc: this.sharedesc,
-                        link: this.shartUrl,
-                        imgUrl: this.shareimg,
+                        title: _this.sharetitle,
+                        desc: _this.sharedesc,
+                        link: _this.shartUrl,
+                        imgUrl: _this.shareimg,
                         success: function () { },
                         cancel: function () { }
                     })
                     wx.onMenuShareAppMessage({
-                        title: this.sharetitle,
-                        desc: this.sharedesc,
-                        link: this.shartUrl,
-                        imgUrl: this.shareimg,
+                        title: _this.sharetitle,
+                        desc: _this.sharedesc,
+                        link: _this.shartUrl,
+                        imgUrl: _this.shareimg,
                         success: function () { },
                         cancel: function () { }
                     });
