@@ -72,6 +72,7 @@ export default {
       popshow: false,
       number: 0,
       timer: null,
+      closeinfo:false,
       userInfo: {},
       baseImg: require("@/assets/img/homebg.jpg"),
       defaultSrc: require("@/assets/img/gif1.gif"),
@@ -86,6 +87,7 @@ export default {
   },
   methods: {
     beginTime() {
+      this.closeinfo=false
       this.popshow = true;
       if (typeof WebSocket === "undefined") {
         alert("您的浏览器不支持socket");
@@ -97,38 +99,31 @@ export default {
       window.ws.onopen = this.onopen;
       window.ws.onmessage = this.onmessage;
       window.ws.onerror = this.onerror;
-      let stringInfo = {
-        status: 'open'
-      };
-      if (window.ws.readyState === 1) {
-        window.ws.send(JSON.stringify(stringInfo), res => {
-          // console.log(res);
-        });
-      }
     },
     onopen(e) {
-      console.log("连接成功");
       this.popshow = false;
       this.matchshow = true;
       this.timer = setInterval(this.goTime, 1000);
     },
     onmessage(data) {
-      let obj = JSON.parse(data.data);
-      this.otherInfo = obj.opponentUser;
-      this.myUser = obj.myUser;
-      localStorage.setItem("otherInfo", JSON.stringify(this.otherInfo));
-      localStorage.setItem("myUser", JSON.stringify(this.myUser));
-      localStorage.setItem("questionList", JSON.stringify(obj.questionList));
-      localStorage.setItem("playUserId", obj.playUserId);
-      Toast({
-        message: "匹配成功",
-        onOpened: () => {
-          this.closematch();
-          this.$router.push({
-            path: "match"
-          });
-        }
-      });
+      if (!this.closeinfo) {
+        let obj = JSON.parse(data.data);
+        this.otherInfo = obj.opponentUser;
+        this.myUser = obj.myUser;
+        localStorage.setItem("otherInfo", JSON.stringify(this.otherInfo));
+        localStorage.setItem("myUser", JSON.stringify(this.myUser));
+        localStorage.setItem("questionList", JSON.stringify(obj.questionList));
+        localStorage.setItem("playUserId", obj.playUserId);
+        Toast({
+          message: "匹配成功",
+          onOpened: () => {
+            this.closematch();
+            this.$router.push({
+              path: "match"
+            });
+          }
+        });
+      }
     },
     onerror(e) {
       console.log(e);
@@ -159,17 +154,11 @@ export default {
       this.number = 0;
     },
     closematch() {
-      let stringInfo = {
-        status: 'close'
-      };
-      if (window.ws.readyState === 1) {
-        window.ws.send(JSON.stringify(stringInfo), res => {
-          // console.log(res);
-        });
-      }
       window.ws.onclose = this.onclose;
       this.clearTimer();
       this.matchshow = false;
+      this.closeinfo=true
+      this.onmessage();
     },
     onclose() {
       console.log("断开链接");
@@ -192,14 +181,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer);
     if (window.ws) {
-      let stringInfo = {
-        type: 1
-      };
-      if (window.ws.readyState === 1) {
-        window.ws.send(JSON.stringify(stringInfo), res => {
-          // console.log(res);
-        });
-      }
+      this.closeinfo=true
       window.ws.onclose = this.onclose;
     }
   }

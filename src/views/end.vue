@@ -58,6 +58,7 @@ export default {
     return {
       matchshow: false,
       popshow: false,
+      closeinfo: false,
       number: 0,
       timer: null,
       endType: null,
@@ -82,6 +83,7 @@ export default {
       }
     },
     beginTime() {
+      this.closeinfo=false
       this.popshow = true;
       if (typeof WebSocket === "undefined") {
         alert("您的浏览器不支持socket");
@@ -101,23 +103,25 @@ export default {
       this.timer = setInterval(this.goTime, 1000);
     },
     onmessage(data) {
-      let obj = JSON.parse(data.data);
-      this.otherInfos = obj.opponentUser;
-      this.myUser = obj.myUser;
-      console.log(obj)
-      localStorage.setItem("otherInfo", JSON.stringify(this.otherInfos));
-      localStorage.setItem("myUser", JSON.stringify(this.myUser));
-      localStorage.setItem("questionList", JSON.stringify(obj.questionList));
-      localStorage.setItem("playUserId", obj.playUserId);
-      Toast({
-        message: "匹配成功",
-        onOpened: () => {
-          this.closematch();
-          this.$router.push({
-            path: "match"
-          });
-        }
-      });
+      if (!this.closeinfo) {
+        let obj = JSON.parse(data.data);
+        this.otherInfos = obj.opponentUser;
+        this.myUser = obj.myUser;
+        console.log(obj);
+        localStorage.setItem("otherInfo", JSON.stringify(this.otherInfos));
+        localStorage.setItem("myUser", JSON.stringify(this.myUser));
+        localStorage.setItem("questionList", JSON.stringify(obj.questionList));
+        localStorage.setItem("playUserId", obj.playUserId);
+        Toast({
+          message: "匹配成功",
+          onOpened: () => {
+            this.closematch();
+            this.$router.push({
+              path: "match"
+            });
+          }
+        });
+      }
     },
     onerror(e) {
       console.log(e);
@@ -133,6 +137,8 @@ export default {
       window.ws.onclose = this.onclose;
       this.clearTimer();
       this.matchshow = false;
+      this.closeinfo=true
+      this.onmessage();
     },
     onclose() {
       console.log("断开链接");
@@ -149,6 +155,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer);
     if (window.wx) {
+      this.closeinfo=true
       window.ws.onclose = this.onclose;
     }
   }
