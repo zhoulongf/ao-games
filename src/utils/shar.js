@@ -16,6 +16,7 @@ export const shartMessage={
     },
     methods:{
         getMessage(){
+            console.log(window.location.href)
             weixinauth().then(res =>{
                 if(res.code == '00000' && res.code){
                     this.shartInfo =res.data

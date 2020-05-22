@@ -88,6 +88,6 @@ export function weixinauth() {
     return request({
         url: apiUrl+`/weixinauth/initjs`,
         method: 'post',
-        params:{url:location.href.split('#')[0]}
+        params:{url:encodeURIComponent(window.location.href)}
     })
 }
