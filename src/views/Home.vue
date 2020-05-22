@@ -1,7 +1,7 @@
 <template>
   <div
     class="home"
-    :style="{backgroundImage: 'url(' + (userInfo.picUrl ? userInfo.picUrl : baseImg) + ')', backgroundSize:'cover', backgroundRepeat: 'no-repeat'}"
+    :style="{backgroundImage: 'url(' + (userInfo.picUrl ? userInfo.picUrl : baseImg) + ')', backgroundSize:'contain', backgroundRepeat: 'no-repeat'}"
   >
     <div class="home-content">
       <div class="home-content-top">

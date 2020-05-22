@@ -112,7 +112,7 @@ export default {
     height: 180px;
     padding: 0 20px;
     margin: 0 auto;
-    margin-top: 60px;
+    margin-top: 40px;
     background: url(../assets/img/question.png) no-repeat center center;
     background-size: 100% 100%;
     display: flex;

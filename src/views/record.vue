@@ -6,7 +6,7 @@
           class="record-item"
           v-for="(item,index) in 2"
           :key="index"
-          :class="[activeIndex == index ? 'activeitems' : null,index == 1 ? 'itemLast' : null]"
+          :class="[activeIndex == index ? 'activeitems' : null]"
           @click="phClick(index)"
         >{{index == 0 ? '日排行奖励' : '周排行榜奖励'}}</div>
       </div>
@@ -18,7 +18,7 @@
       <div class="record-infos">
         <div class="record-infos-item" v-for="(item,index) in list" :key="index">
           <div class="item-left">
-            <img :src="item.levelPic" alt="暂无图片" />
+            <img :src="item.litpicPath" alt="暂无图片" />
             <span class="ative-item span0">{{item.nickName}}</span>
           </div>
           <div class="span0">{{item.level}}</div>
@@ -28,7 +28,7 @@
           </div>
         </div>
       </div>
-      <img class="record-bt" src="@/assets/img/recordbt.png" />
+      <!-- <img class="record-bt" src="@/assets/img/recordbt.png" /> -->
     </div>
     <div class="foot-bottom">
       <img @click="goClick(1)" src="@/assets/img/gohome.png" />
@@ -91,6 +91,7 @@ export default {
     background-size: 100% 100%;
     position: relative;
     &-list {
+      margin-right: 8px;
       display: flex;
       justify-content: space-around;
       border-bottom:4px solid #B0DBDD;
@@ -109,8 +110,8 @@ export default {
         }
         &.activeitems{
           background:#B0DDDF;
-          border-top-left-radius:10px;
-          border-top-right-radius:10px;
+          border-top-left-radius:20px;
+          border-top-right-radius:20px;
         }
         // &.item0 {
         //   background: url(../assets/img/recordday.png) no-repeat center center;
@@ -140,7 +141,7 @@ export default {
       }
     }
     &-infos {
-      padding-right: 8px;
+      padding-right: 6px;
     //   margin-bottom: 10px;
       height: calc(100vh - 200px);
       overflow-y: auto;
@@ -167,10 +168,11 @@ export default {
         .item-left {
           display: flex;
           flex-direction: row;
-          justify-content: space-around;
           align-items: center;
+          margin-left: 10px;
           span {
             margin-left: 5px;
+            font-size: 12px;
           }
           img {
             width: 40px;

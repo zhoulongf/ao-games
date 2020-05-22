@@ -3,11 +3,11 @@
     <div class="rank-list">
       <div
         class="rank-item"
-        v-for="(item,index) in 3"
+        v-for="(item,index) in topList"
         :key="index"
-        :class="[activeIndex == index ? `item${index}` : null,index == 2 ? 'itemLast' : null]"
+        :class="[activeIndex == index ? 'activeitems' : null]"
         @click="phClick(index)"
-      ></div>
+      ><img v-if="activeIndex == index" :src="chapin">{{item}}</div>
     </div>
     <div class="rank-infos">
       <div class="rank-infos-item" v-for="(item,index) in list" :key="index">
@@ -18,7 +18,9 @@
           <img :src="item.litpicPath" alt="暂无图片" />
           <div>
             <p class="span0 omit">{{item.nickName}}</p>
-            <p class="span2">{{activeIndex == 0 ? '本日积分' : (activeIndex == 1 ? '本周积分' : '总积分')}}：{{item.border ? item.border : 0}}分</p>
+            <p
+              class="span2"
+            >{{activeIndex == 0 ? '本日积分' : (activeIndex == 1 ? '本周积分' : '总积分')}}：{{item.border ? item.border : 0}}分</p>
           </div>
         </div>
         <div class="item-right omit">
@@ -45,7 +47,7 @@
     </div>
     <div class="rank-bottom">
       <p class="rank-top">
-        <span class="span0" v-show="activeIndex !=2">进入排行榜前{{rankNum}}名，可获取影票{{ticketNum}}张</span>  
+        <span class="span0" v-show="activeIndex !=2">进入排行榜前{{rankNum}}名，可获取影票{{ticketNum}}张</span>
       </p>
       <div class="foot-bottom">
         <span class="span0" @click="gzclick">影票赢取规则及说明</span>
@@ -55,7 +57,7 @@
     <div class="rigtFix" v-if="myInfo.isAward" @click="gomyRecord"></div>
     <van-dialog v-model="gzshow" title="影票赢取规则及说明">
       <div class="gz-dialog">
-        <img v-if='myInfo.flowPic' :src='myInfo.flowPic' />
+        <img v-if="myInfo.flowPic" :src="myInfo.flowPic" />
         <!-- <img v-if='myInfo.flowPic' :src='myInfo.flowPic' /> -->
         <span v-else>--</span>
       </div>
@@ -63,88 +65,104 @@
   </div>
 </template>
 <script>
-import { ranking } from '@/api/index.js'
+import { ranking } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog } from "vant";
-import { shartMessage } from "@/utils/shar.js"
+import { shartMessage } from "@/utils/shar.js";
 Vue.use(Dialog);
 export default {
   name: "rank",
   mixins: [shartMessage],
   data() {
     return {
+      topList: ["日排行", "周排行", "总排行"],
       activeIndex: 0,
-      integraltext:null,
-      rankText:null,
-      gzshow:false,
-      rankNum:0,
-      ticketNum:0,
+      integraltext: null,
+      rankText: null,
+      gzshow: false,
+      rankNum: 0,
+      ticketNum: 0,
       list: [],
-      allList:[],
-      myInfo:{},
-      defaultsrc:require('@/assets/img/rankdw.png')
+      allList: [],
+      myInfo: {},
+      chapin:require("@/assets/img/chapin.png"),
+      defaultsrc: require("@/assets/img/rankdw.png")
     };
   },
   methods: {
     phClick(index) {
       this.activeIndex = index;
-      if(index == 0){
-        this.list=JSON.parse(JSON.stringify(this.allList.day))
-      }else if(index == 1){
-        this.list=JSON.parse(JSON.stringify(this.allList.week))
-      }else{
-        this.list=JSON.parse(JSON.stringify(this.allList.all))
+      if (index == 0) {
+        this.list = JSON.parse(JSON.stringify(this.allList.day));
+      } else if (index == 1) {
+        this.list = JSON.parse(JSON.stringify(this.allList.week));
+      } else {
+        this.list = JSON.parse(JSON.stringify(this.allList.all));
       }
-      this.textSelect(index)
+      this.textSelect(index);
     },
-    goRecord(){
+    goRecord() {
       this.$router.push({
-          path: "record"
-        });
+        path: "record"
+      });
     },
-    gomyRecord(){
+    gomyRecord() {
       this.$router.push({
-          path: "myrecord"
-        });
+        path: "myrecord"
+      });
     },
-    gzclick(){
-      this.gzshow=true
+    gzclick() {
+      this.gzshow = true;
     },
-    textSelect(key){
-      switch(key){
+    textSelect(key) {
+      switch (key) {
         case 0:
-          this.integraltext=`本日积分：${this.myInfo.dayBorder ? this.myInfo.dayBorder : 0}分`;
-          this.rankText=`本日排名：${this.myInfo.dayBorder ? this.myInfo.dayRanking : '**' }名`;
-          this.rankNum =this.myInfo.topFrewDay ? this.myInfo.topFrewDay : '**'
-          this.ticketNum = this.myInfo.awardDay ? this.myInfo.awardDay : '**'
+          this.integraltext = `本日积分：${
+            this.myInfo.dayBorder ? this.myInfo.dayBorder : 0
+          }分`;
+          this.rankText = `本日排名：${
+            this.myInfo.dayBorder ? this.myInfo.dayRanking : "**"
+          }名`;
+          this.rankNum = this.myInfo.topFrewDay ? this.myInfo.topFrewDay : "**";
+          this.ticketNum = this.myInfo.awardDay ? this.myInfo.awardDay : "**";
           break;
         case 1:
-          this.integraltext=`本周积分：${this.myInfo.weekBorder ? this.myInfo.weekBorder : 0}分`;
-          this.rankText=`本周排名：${this.myInfo.weekRanking ? this.myInfo.weekRanking : 0}名`;
-          this.rankNum =this.myInfo.topFrewWeek ? this.myInfo.topFrewWeek : '**'
-          this.ticketNum = this.myInfo.awardWeek ? this.myInfo.awardWeek : '**'
+          this.integraltext = `本周积分：${
+            this.myInfo.weekBorder ? this.myInfo.weekBorder : 0
+          }分`;
+          this.rankText = `本周排名：${
+            this.myInfo.weekRanking ? this.myInfo.weekRanking : 0
+          }名`;
+          this.rankNum = this.myInfo.topFrewWeek
+            ? this.myInfo.topFrewWeek
+            : "**";
+          this.ticketNum = this.myInfo.awardWeek ? this.myInfo.awardWeek : "**";
           break;
         case 2:
-          this.integraltext=`总积分：${this.myInfo.allBorder ? this.myInfo.allBorder : 0}分`;
-          this.rankText=`总排名：${this.myInfo.allRanking ? this.myInfo.allRanking : 0}名`;
-          this.rankNum ="**"
-          this.ticketNum = '**'
+          this.integraltext = `总积分：${
+            this.myInfo.allBorder ? this.myInfo.allBorder : 0
+          }分`;
+          this.rankText = `总排名：${
+            this.myInfo.allRanking ? this.myInfo.allRanking : 0
+          }名`;
+          this.rankNum = "**";
+          this.ticketNum = "**";
           break;
       }
     },
-    getData(){
-      ranking().then(res =>{
-        if(res.code =='00000'){
-          this.allList=res.data
-          this.list=res.data.day
-          this.myInfo=res.data.myInfo
-          this.textSelect(0)
+    getData() {
+      ranking().then(res => {
+        if (res.code == "00000") {
+          this.allList = res.data;
+          this.list = res.data.day;
+          this.myInfo = res.data.myInfo;
+          this.textSelect(0);
         }
-      })
+      });
     }
   },
-  mounted(){
-    this.getData()
+  mounted() {
+    this.getData();
   }
 };
 </script>
@@ -153,35 +171,52 @@ export default {
   width: 92%;
   height: calc(100vh - 55px);
   margin: 30px auto;
-  background: url(../assets/img/rankbg.png) no-repeat center center;
+  background: url(../assets/img/rank01.png) no-repeat center center;
   background-size: 100% 100%;
   display: flex;
   flex-direction: column;
   position: relative;
   &-list {
-    // padding-top: 5px;
+    margin-right: 6px;
     display: flex;
     justify-content: space-around;
+    border-bottom: 4px solid #b0dbdd;
+    margin-left: -1px;
     .rank-item {
       width: 33%;
-      height: 34px;
+      height: 44px;
       cursor: pointer;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bolder;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img{
+        width: 20px;
+        height: 26px;
+      }
       &.itemLast {
-        width: 30%;
-        margin-right: 8px;
+        // width: 30%;
+        // margin-right: 8px;
       }
-      &.item0 {
-        background: url(../assets/img/rankday.png) no-repeat center center;
-        background-size: cover;
+      &.activeitems {
+        background: #b0dddf;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
       }
-      &.item1 {
-        background: url(../assets/img/rankweek.png) no-repeat center center;
-        background-size: cover;
-      }
-      &.item2 {
-        background: url(../assets/img/rankall.png) no-repeat center center;
-        background-size: cover;
-      }
+      // &.item0 {
+      //   background: url(../assets/img/rankday.png) no-repeat center center;
+      //   background-size: cover;
+      // }
+      // &.item1 {
+      //   background: url(../assets/img/rankweek.png) no-repeat center center;
+      //   background-size: cover;
+      // }
+      // &.item2 {
+      //   background: url(../assets/img/rankall.png) no-repeat center center;
+      //   background-size: cover;
+      // }
     }
   }
   .item-center {
@@ -283,30 +318,30 @@ export default {
       }
     }
   }
-  .rank-bottom{
+  .rank-bottom {
     width: 98%;
     height: 80px;
     background: url(../assets/img/rankbottom.png) no-repeat center center;
     background-size: contain;
-    .rank-top{
-      margin-top:10px;
+    .rank-top {
+      margin-top: 10px;
       text-align: center;
       height: 20px;
     }
-    .foot-bottom{
+    .foot-bottom {
       width: 80%;
       margin: 0 auto;
       height: 30px;
       display: flex;
       justify-content: space-around;
       align-items: center;
-      span{
-        text-decoration:underline;
+      span {
+        text-decoration: underline;
         cursor: pointer;
       }
     }
   }
-  .rigtFix{
+  .rigtFix {
     position: fixed;
     width: 60px;
     height: 40px;
@@ -317,14 +352,14 @@ export default {
     background-size: 100% 100%;
     cursor: pointer;
   }
-  .gz-dialog{
+  .gz-dialog {
     width: 92%;
     height: auto;
     margin: 20px auto;
     text-align: center;
-    img{
-      width:80%;
-      height:200px;
+    img {
+      width: 80%;
+      height: 200px;
     }
   }
 }
