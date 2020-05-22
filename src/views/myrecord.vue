@@ -95,6 +95,7 @@ import { getMyAwardList, getPhoneCode, getAward } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog, Toast, Form, Field, Button, Overlay } from "vant";
 import Clipboard from "clipboard";
+import { shartMessage } from "@/utils/shar.js";
 Vue.use(Dialog)
   .use(Toast)
   .use(Form)
@@ -103,6 +104,7 @@ Vue.use(Dialog)
   .use(Overlay);
 export default {
   name: "record",
+  mixins: [shartMessage],
   data() {
     return {
       defaultsrc:require('@/assets/img/picture.jpeg'),

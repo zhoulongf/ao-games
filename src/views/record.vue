@@ -38,8 +38,10 @@
 </template>
 <script>
 import { awardList } from '@/api/index.js'
+import { shartMessage } from "@/utils/shar.js";
 export default {
   name: "record",
+  mixins: [shartMessage],
   data() {
     return {
       activeIndex: 0,

@@ -47,11 +47,13 @@
 <script>
 import Vue from "vue";
 import { Dialog, Toast, Popup } from "vant";
+import { shartMessage } from "@/utils/shar.js";
 Vue.use(Dialog)
   .use(Toast)
   .use(Popup);
 export default {
   name: "end",
+  mixins: [shartMessage],
   data() {
     return {
       matchshow: false,
@@ -100,8 +102,9 @@ export default {
     },
     onmessage(data) {
       let obj = JSON.parse(data.data);
-      this.otherInfo = obj.opponentUser;
+      this.otherInfos = obj.opponentUser;
       this.myUser = obj.myUser;
+      console.log(obj)
       localStorage.setItem("otherInfo", JSON.stringify(this.otherInfos));
       localStorage.setItem("myUser", JSON.stringify(this.myUser));
       localStorage.setItem("questionList", JSON.stringify(obj.questionList));

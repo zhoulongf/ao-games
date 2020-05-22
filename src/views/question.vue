@@ -19,11 +19,13 @@
 </template>
 <script>
 import { getQuestionList } from "@/api/index.js";
+import { shartMessage } from "@/utils/shar.js";
 import Vue from "vue";
 import { Toast } from "vant";
 Vue.use(Toast);
 export default {
   name: "question",
+  mixins: [shartMessage],
   data() {
     return {
       imgSrc: null,

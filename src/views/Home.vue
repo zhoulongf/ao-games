@@ -52,12 +52,14 @@
 import { homePage, chooseUser } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog, Toast, Popup } from "vant";
+import { shartMessage } from "@/utils/shar.js";
 Vue.use(Dialog)
   .use(Toast)
   .use(Popup);
 import MyHeader from "@/components/my-header";
 export default {
   name: "Home",
+  mixins: [shartMessage],
   components: {
     MyHeader
   },

@@ -66,9 +66,11 @@
 import { ranking } from '@/api/index.js'
 import Vue from "vue";
 import { Dialog } from "vant";
+import { shartMessage } from "@/utils/shar.js"
 Vue.use(Dialog);
 export default {
   name: "rank",
+  mixins: [shartMessage],
   data() {
     return {
       activeIndex: 0,

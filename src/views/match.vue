@@ -45,9 +45,11 @@
 <script>
 import Vue from "vue";
 import { Toast } from "vant";
+import { shartMessage } from "@/utils/shar.js";
 Vue.use(Toast);
 export default {
   name: "match",
+  mixins: [shartMessage],
   data() {
     return {
       titles: null,
