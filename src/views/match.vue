@@ -169,8 +169,9 @@ export default {
       this.myGrad = obj.presentGrade;
       this.otherGrade = obj.opponentUser.grade;
       //判断两者都答完之后的操作
+      console.log(obj.next,this.playUserId)
       if (this.pageNum < this.questionList.length - 1) {
-        if (obj.next == true) {
+        if (obj.next == true && (this.pageNum == obj.presentSize)) {
           this.clearTimer(this.timer);
           setTimeout(() => {
             this.pageNum++;

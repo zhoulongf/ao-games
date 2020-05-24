@@ -132,7 +132,6 @@ export default {
         this.conversion = item.award ? item.award.split(",") : [];
         this.lookma = true;
       } else if (item.isGet == 0) {
-        alert(this.id)
         // this.lookma=true
         // this.receive=false
         this.phoneDia = true;
