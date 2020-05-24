@@ -171,7 +171,8 @@ export default {
       //判断两者都答完之后的操作
       console.log(obj.next,this.playUserId)
       if (this.pageNum < this.questionList.length - 1) {
-        if (obj.next == true && (this.pageNum == obj.presentSize)) {
+        console.log(this.currentPage,obj.presentSize)
+        if (obj.next == true && (this.currentPage == obj.presentSize)) {
           this.clearTimer(this.timer);
           setTimeout(() => {
             this.pageNum++;
