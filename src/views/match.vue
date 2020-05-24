@@ -93,10 +93,9 @@ export default {
             questionId: this.questionId,
             option: this.option
           };
-          // console.log(window.math.readyState);
+          console.log('我没答题')
           if (window.math.readyState === 1) {
             window.math.send(JSON.stringify(stringInfo), res => {
-              // console.log(res);
             });
           }
         }
@@ -115,6 +114,7 @@ export default {
               option: null
             };
             if (window.math.readyState === 1) {
+              console.log('我是人机')
               window.math.send(JSON.stringify(stringInfo), res => {
                 // console.log(res);
               });
@@ -138,10 +138,9 @@ export default {
           questionId: this.questionId,
           option: this.option
         };
-        // console.log(window.math.readyState);
         if (window.math.readyState === 1) {
+          console.log('我答题了')
           window.math.send(JSON.stringify(stringInfo), res => {
-            // console.log(res);
           });
         }
 
@@ -161,7 +160,6 @@ export default {
       window.math.onerror = this.onerror;
     },
     onopen(e) {
-      console.log("连接成功");
       this.timer = setInterval(this.goTime, 1000);
     },
     onmessage(data) {
