@@ -17,7 +17,7 @@
     </div>
     <div class="match-answer">问题{{currentPage}}/{{questionList.length}}</div>
     <div class="match-top">
-      <span :class="titles && titles.length<20 ? 'centers' : null">{{titles}}</span>
+      <span class="titles">{{titles}}</span>
       <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="match-list">
@@ -28,7 +28,7 @@
         @click="chooseQuestion(index,item)"
         :class="corrStatus && currentNUm==index ? (correct == item ? 'yesClass' : 'noClass') :  null"
       >
-        <span :class="item.length < 16 ? 'centers' : null">{{item}}</span>
+        <span class="titles">{{item}}</span>
         <!-- <img
           class="correctquestion"
           v-if="otherStatus == index"
@@ -36,7 +36,8 @@
         />-->
         <img
           v-if=" currentNUm==index && corrStatus"
-          class="correctquestion" :class="correct == item ? null : 'errorclass'"
+          class="correctquestion"
+          :class="correct == item ? null : 'errorclass'"
           :src="correct == item ? srcRight : srcError"
         />
       </div>
@@ -93,10 +94,9 @@ export default {
             questionId: this.questionId,
             option: this.option
           };
-          console.log('我没答题')
+          console.log("我没答题");
           if (window.math.readyState === 1) {
-            window.math.send(JSON.stringify(stringInfo), res => {
-            });
+            window.math.send(JSON.stringify(stringInfo), res => {});
           }
         }
       } else {
@@ -114,7 +114,7 @@ export default {
               option: null
             };
             if (window.math.readyState === 1) {
-              console.log('我是人机')
+              console.log("我是人机");
               window.math.send(JSON.stringify(stringInfo), res => {
                 // console.log(res);
               });
@@ -139,9 +139,8 @@ export default {
           option: this.option
         };
         if (window.math.readyState === 1) {
-          console.log('我答题了')
-          window.math.send(JSON.stringify(stringInfo), res => {
-          });
+          console.log("我答题了");
+          window.math.send(JSON.stringify(stringInfo), res => {});
         }
 
         return false;
@@ -167,10 +166,10 @@ export default {
       this.myGrad = obj.presentGrade;
       this.otherGrade = obj.opponentUser.grade;
       //判断两者都答完之后的操作
-      console.log(obj.next,this.playUserId)
+      console.log(obj.next, this.playUserId);
       if (this.pageNum < this.questionList.length - 1) {
-        console.log(this.currentPage,obj.presentSize)
-        if (obj.next == true && (this.currentPage == obj.presentSize)) {
+        console.log(this.currentPage, obj.presentSize);
+        if (obj.next == true && this.currentPage == obj.presentSize) {
           this.clearTimer(this.timer);
           setTimeout(() => {
             this.pageNum++;
@@ -179,16 +178,21 @@ export default {
           }, 2000);
         }
       } else {
-        this.clearTimer(this.timer);
-        localStorage.setItem("myGrad", this.myGrad);
-        localStorage.setItem("otherGrade", this.otherGrade);
-        window.math.onclose = this.onclose;
-        this.$router.push({
-          path: "end",
-          query: {
-            status: this.myGrad > this.otherGrade ? "true" : "false"
-          }
-        });
+        console.log(obj.presentSize,'dddd')
+        if (obj.presentSize == 10) {
+          this.clearTimer(this.timer);
+          localStorage.setItem("myGrad", this.myGrad);
+          localStorage.setItem("otherGrade", this.otherGrade);
+          window.math.onclose = this.onclose;
+          this.$router.push({
+            path: "end",
+            query: {
+              status: this.myGrad > this.otherGrade ? "true" : "false",
+              up:obj.up,
+              upLevelName:obj.upLevelName
+            }
+          });
+        }
       }
 
       // if (this.pageNum == this.questionList.length) {
@@ -233,6 +237,10 @@ export default {
   height: 100%;
   position: relative;
   overflow: hidden;
+  .titles{
+    display: flex;
+    justify-content: center;
+  }
   .centers {
     text-align: center;
   }
@@ -348,7 +356,7 @@ export default {
         top: 50%;
         right: 5px;
         transform: translateY(-50%);
-        &.errorclass{
+        &.errorclass {
           width: 20px;
         }
       }

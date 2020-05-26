@@ -1,7 +1,7 @@
 <template>
   <div class="question">
     <div class="question-top">
-      <div :class="titles && titles.length<25 ? 'centers' : null">{{titles}}</div>
+      <div class="titles">{{titles}}</div>
       <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="question-list">
@@ -11,7 +11,7 @@
         v-for="(item,index) in questions"
         :key="index"
       >
-        <span :class="item.length < 16 ? 'centers' : null">{{item}}</span>
+        <span class="titles">{{item}}</span>
         <img v-if="correct == item" class="correctquestion" src="../assets/img/yes1.png" />
       </div>
     </div>
@@ -26,6 +26,7 @@
 import { getQuestionList } from "@/api/index.js";
 import { shartMessage } from "@/utils/shar.js";
 import Vue from "vue";
+const lodash = require('lodash')
 import { Toast } from "vant";
 Vue.use(Toast);
 export default {
@@ -58,7 +59,7 @@ export default {
         return false;
       }
     },
-    prex(key) {
+    prex:lodash.debounce(function(key){
       // if (!this.result) {
       //   Toast("请先选题");
       //   return false;
@@ -80,16 +81,15 @@ export default {
           return false;
         }
       }
-      this.$nextTick(() => {
-        this.titles = this.list[this.pageNum].body;
+          this.titles = this.list[this.pageNum].body;
         this.imgSrc = this.list[this.pageNum].bodyPic;
         this.questions = this.list[this.pageNum].questions;
         this.correct = this.list[this.pageNum].result;
         this.corrStatus = false;
         this.onceClick = false;
         this.result = null;
-      });
-    }
+      // });
+    },300)
   },
   mounted() {
     getQuestionList().then(res => {
@@ -113,6 +113,10 @@ export default {
   overflow: hidden;
   .centers {
     text-align: center;
+  }
+  .titles{
+    display: flex;
+    justify-content: center;
   }
   &-top {
     width: 96%;

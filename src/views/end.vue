@@ -65,7 +65,7 @@ export default {
   mixins: [shartMessage],
   data() {
     return {
-      leaveShow: true,
+      leaveShow: false,
       matchshow: false,
       popshow: false,
       closeinfo: false,
@@ -78,7 +78,7 @@ export default {
       otherInfo: JSON.parse(localStorage.getItem("otherInfo")),
       myUser: JSON.parse(localStorage.getItem("myUser")),
       defaultHead: require("@/assets/img/head.png"),
-      leavepic: require("@/assets/rand/1.png"),
+      leavepic: null,
       myInfo: {},
       otherInfos: {}
     };
@@ -159,7 +159,44 @@ export default {
     }
   },
   mounted() {
-    let status = this.$route.query.status;
+    let status = this.$route.query.status,up=this.$route.query.up, upLevelName=this.$route.query.upLevelName;
+    if(up && upLevelName){
+      switch(upLevelName){
+        case '入库撞杆':
+          this.leavepic=require("@/assets/rand/1.png");
+          break;
+        case '领取驾照':
+          this.leavepic=require("@/assets/rand/2.png");
+          break;
+        case '公路杀手':
+          this.leavepic=require("@/assets/rand/3.png");
+          break;
+        case '见习司机':
+          this.leavepic=require("@/assets/rand/4.png");
+          break;
+        case '路怒狂人':
+          this.leavepic=require("@/assets/rand/5.png");
+          break;
+        case '老司机':
+          this.leavepic=require("@/assets/rand/6.png");
+          break;
+        case '民间车神':
+          this.leavepic=require("@/assets/rand/7.png");
+          break;
+        case '赛道新人':
+          this.leavepic=require("@/assets/rand/8.png");
+          break;
+        case '杯赛选手':
+          this.leavepic=require("@/assets/rand/9.png");
+          break;
+        case '杯赛冠军':
+          this.leavepic=require("@/assets/rand/10.png");
+          break;
+        case '大满贯':
+          this.leavepic=require("@/assets/rand/11.png");
+          break;
+      }
+    } this.leaveShow =  up == 'true' ? true : false;
     if (status) {
       this.endType = status;
     } else {
@@ -177,7 +214,7 @@ export default {
 </script>
 <style lang="scss">
 .vantdia {
-  background: #ccc;
+  background: #313C3D;
 }
 .leaveDia {
   height: calc(100vh - 200px);
