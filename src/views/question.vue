@@ -1,11 +1,16 @@
 <template>
   <div class="question">
     <div class="question-top">
-      <div :class="titles && titles.length<20 ? 'centers' : null">{{titles}}</div>
+      <div :class="titles && titles.length<25 ? 'centers' : null">{{titles}}</div>
       <img v-if="imgSrc" :src="imgSrc" />
     </div>
     <div class="question-list">
-      <div class="question-list-item" :class="correct == item ? 'yescalss' : null" v-for="(item,index) in questions" :key="index">
+      <div
+        class="question-list-item"
+        :class="correct == item ? 'yescalss' : null"
+        v-for="(item,index) in questions"
+        :key="index"
+      >
         <span :class="item.length < 16 ? 'centers' : null">{{item}}</span>
         <img v-if="correct == item" class="correctquestion" src="../assets/img/yes1.png" />
       </div>
@@ -75,13 +80,15 @@ export default {
           return false;
         }
       }
-      this.titles = this.list[this.pageNum].body;
-      this.imgSrc = this.list[this.pageNum].bodyPic;
-      this.questions = this.list[this.pageNum].questions;
-      this.correct = this.list[this.pageNum].result;
-      this.corrStatus = false;
-      this.onceClick = false;
-      this.result = null;
+      this.$nextTick(() => {
+        this.titles = this.list[this.pageNum].body;
+        this.imgSrc = this.list[this.pageNum].bodyPic;
+        this.questions = this.list[this.pageNum].questions;
+        this.correct = this.list[this.pageNum].result;
+        this.corrStatus = false;
+        this.onceClick = false;
+        this.result = null;
+      });
     }
   },
   mounted() {
@@ -152,7 +159,7 @@ export default {
         right: 5px;
         transform: translateY(-50%);
       }
-      &.yescalss{
+      &.yescalss {
         background: url(../assets/img/yes01.png) no-repeat center center;
         background-size: 100% 100%;
       }

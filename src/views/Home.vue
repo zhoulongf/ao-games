@@ -72,22 +72,22 @@ export default {
       popshow: false,
       number: 0,
       timer: null,
-      closeinfo:false,
+      closeinfo: false,
       userInfo: {},
       baseImg: require("@/assets/img/homebg.jpg"),
-      defaultSrc: require("@/assets/img/gif1.gif"),
+      defaultSrc: require("@/assets/img/matchtou.gif"),
       otherInfo: {},
       myUser: {},
       list: [
         require("../assets/img/ph.png"),
         require("../assets/img/tk.png"),
-        require("../assets/img/gz.png")
+        require("../assets/img/07.png")
       ]
     };
   },
   methods: {
     beginTime() {
-      this.closeinfo=false
+      this.closeinfo = false;
       this.popshow = true;
       if (typeof WebSocket === "undefined") {
         alert("您的浏览器不支持socket");
@@ -139,7 +139,8 @@ export default {
         });
       } else if (key == 2) {
         Dialog.alert({
-          title: "游戏规则",
+          title: "",
+          className: "jsutAlert",
           message: this.userInfo.rule ? this.userInfo.rule : "暂无规则"
         }).then(() => {
           // on close
@@ -157,7 +158,7 @@ export default {
       window.ws.onclose = this.onclose;
       this.clearTimer();
       this.matchshow = false;
-      this.closeinfo=true
+      this.closeinfo = true;
       this.onmessage();
     },
     onclose() {
@@ -181,7 +182,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer);
     if (window.ws) {
-      this.closeinfo=true
+      this.closeinfo = true;
       window.ws.onclose = this.onclose;
     }
   }
@@ -190,6 +191,11 @@ export default {
 <style lang="scss">
 .vantdia {
   background: #ccc;
+}
+.jsutAlert {
+  .van-dialog__message {
+    text-align: justify;
+  }
 }
 </style>
 <style lang="scss" scoped>

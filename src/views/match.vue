@@ -6,9 +6,9 @@
         <p>{{myUser.nickname ? myUser.nickname : 'xxx'}}</p>
       </div>
       <div class="match-info-conter">
-        <div class="score-left score-left1 span1">{{myGrad}}</div>
-        <div class="score-center">{{number}}</div>
-        <div class="score-right score-right1 span1">{{otherGrade}}</div>
+        <div class="score-left score-left1 span1">{{myGrad}}分</div>
+        <div class="score-center">{{number}}s</div>
+        <div class="score-right score-right1 span1">{{otherGrade}}分</div>
       </div>
       <div class="match-info-left">
         <img :src="otherInfo.litpicPath ? otherInfo.litpicPath : defaultHead" />

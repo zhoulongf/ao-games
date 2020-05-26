@@ -87,6 +87,7 @@ export default {
     width: 92%;
     height: auto;
     margin: 20px auto;
+    padding-bottom: 30px;
     background: url(../assets/img/13.png) no-repeat center center;
     background-size: 100% 100%;
     position: relative;
@@ -143,7 +144,7 @@ export default {
     &-infos {
       padding-right: 6px;
     //   margin-bottom: 10px;
-      height: calc(100vh - 200px);
+      height: calc(100vh - 230px);
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       position: relative;

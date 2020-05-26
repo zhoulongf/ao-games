@@ -57,7 +57,7 @@
     <div class="rigtFix" v-if="myInfo.isAward" @click="gomyRecord"></div>
     <van-dialog v-model="gzshow" title="影票赢取规则及说明">
       <div class="gz-dialog">
-        <img v-if="myInfo.flowPic" :src="myInfo.flowPic" />
+        <img v-if="myInfo.flowPic" :src="myInfo.flowPic" @click="imgPre(myInfo.flowPic)" />
         <!-- <img v-if='myInfo.flowPic' :src='myInfo.flowPic' /> -->
         <span v-else>--</span>
       </div>
@@ -67,9 +67,9 @@
 <script>
 import { ranking } from "@/api/index.js";
 import Vue from "vue";
-import { Dialog } from "vant";
+import { Dialog,ImagePreview } from "vant";
 import { shartMessage } from "@/utils/shar.js";
-Vue.use(Dialog);
+Vue.use(Dialog).use(ImagePreview);
 export default {
   name: "rank",
   mixins: [shartMessage],
@@ -121,7 +121,7 @@ export default {
             this.myInfo.dayBorder ? this.myInfo.dayBorder : 0
           }分`;
           this.rankText = `本日排名：${
-            this.myInfo.dayBorder ? this.myInfo.dayRanking : "**"
+            this.myInfo.dayBorder ? this.myInfo.dayRanking : "无"
           }名`;
           this.rankNum = this.myInfo.topFrewDay ? this.myInfo.topFrewDay : "**";
           this.ticketNum = this.myInfo.awardDay ? this.myInfo.awardDay : "**";
@@ -131,7 +131,7 @@ export default {
             this.myInfo.weekBorder ? this.myInfo.weekBorder : 0
           }分`;
           this.rankText = `本周排名：${
-            this.myInfo.weekRanking ? this.myInfo.weekRanking : 0
+            this.myInfo.weekRanking ? this.myInfo.weekRanking : '无'
           }名`;
           this.rankNum = this.myInfo.topFrewWeek
             ? this.myInfo.topFrewWeek
@@ -143,7 +143,7 @@ export default {
             this.myInfo.allBorder ? this.myInfo.allBorder : 0
           }分`;
           this.rankText = `总排名：${
-            this.myInfo.allRanking ? this.myInfo.allRanking : 0
+            this.myInfo.allRanking ? this.myInfo.allRanking : '无'
           }名`;
           this.rankNum = "**";
           this.ticketNum = "**";
@@ -159,6 +159,9 @@ export default {
           this.textSelect(0);
         }
       });
+    },
+    imgPre(src){
+      ImagePreview([src]);
     }
   },
   mounted() {
@@ -225,12 +228,13 @@ export default {
     background: #9ddadd;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    // justify-content: space-around;
     align-items: center;
     img {
       width: 40px;
       height: 40px;
       border-radius: 50%;
+      margin: 0 15px 0 10px;
     }
   }
   .item-right {
@@ -354,12 +358,16 @@ export default {
   }
   .gz-dialog {
     width: 92%;
-    height: auto;
+    height: 200px;
     margin: 20px auto;
     text-align: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    justify-content: center;
     img {
-      width: 80%;
-      height: 200px;
+      width: auto;
+      height: 100%;
     }
   }
 }
