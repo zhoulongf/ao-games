@@ -196,7 +196,8 @@ export default {
           this.leavepic=require("@/assets/rand/11.png");
           break;
       }
-    } this.leaveShow =  up == 'true' ? true : false;
+      this.leaveShow =  up == 'true' ? true : false;
+    }
     if (status) {
       this.endType = status;
     } else {

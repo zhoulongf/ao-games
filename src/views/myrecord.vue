@@ -93,7 +93,7 @@
 <script>
 import { getMyAwardList, getPhoneCode, getAward } from "@/api/index.js";
 import Vue from "vue";
-import { Dialog, Toast, Form, Field, Button, Overlay } from "vant";
+import { Dialog, Toast, Form, Field, Button, Overlay,ImagePreview } from "vant";
 import Clipboard from "clipboard";
 import { shartMessage } from "@/utils/shar.js";
 Vue.use(Dialog)
@@ -101,7 +101,8 @@ Vue.use(Dialog)
   .use(Form)
   .use(Field)
   .use(Button)
-  .use(Overlay);
+  .use(Overlay)
+  .use(ImagePreview);
 export default {
   name: "record",
   mixins: [shartMessage],
@@ -138,7 +139,8 @@ export default {
       }
     },
     lookPiao(){
-      this.optionShow=true
+      // this.optionShow=true
+      ImagePreview([this.defaultsrc]);
     },
     diaFalse() {
       this.lookma = false;
@@ -399,8 +401,9 @@ export default {
       &-item {
         width: 80%;
         margin: 0 auto;
+        padding: 0 5px;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
       }
       .duih {
         height: 30px;

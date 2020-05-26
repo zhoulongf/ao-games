@@ -7,7 +7,10 @@
         :key="index"
         :class="[activeIndex == index ? 'activeitems' : null]"
         @click="phClick(index)"
-      ><img v-if="activeIndex == index" :src="chapin">{{item}}</div>
+      >
+        <img v-if="activeIndex == index" :src="chapin" />
+        {{item}}
+      </div>
     </div>
     <div class="rank-infos">
       <div class="rank-infos-item" v-for="(item,index) in list" :key="index">
@@ -54,12 +57,12 @@
         <span class="span0" @click="goRecord">获奖记录</span>
       </div>
     </div>
-    <div class="rigtFix" v-if="myInfo.isAward" @click="gomyRecord"></div>
+    <div class="rigtFix" :class="myInfo.isAward ? 'rankyes':'rankno'" @click="gomyRecord"></div>
     <van-dialog v-model="gzshow" title="影票赢取规则及说明">
       <div class="gz-dialog">
-        <img v-if="myInfo.flowPic" :src="myInfo.flowPic" @click="imgPre(myInfo.flowPic)" />
+        <!-- <img v-if="myInfo.flowPic" :src="myInfo.flowPic" @click="imgPre(myInfo.flowPic)" /> -->
         <!-- <img v-if='myInfo.flowPic' :src='myInfo.flowPic' /> -->
-        <span v-else>--</span>
+        <span>{{myInfo.rankingRule ? myInfo.myInfo : '--'}}</span>
       </div>
     </van-dialog>
   </div>
@@ -67,7 +70,7 @@
 <script>
 import { ranking } from "@/api/index.js";
 import Vue from "vue";
-import { Dialog,ImagePreview } from "vant";
+import { Dialog, ImagePreview } from "vant";
 import { shartMessage } from "@/utils/shar.js";
 Vue.use(Dialog).use(ImagePreview);
 export default {
@@ -85,7 +88,7 @@ export default {
       list: [],
       allList: [],
       myInfo: {},
-      chapin:require("@/assets/img/chapin.png"),
+      chapin: require("@/assets/img/chapin.png"),
       defaultsrc: require("@/assets/img/rankdw.png")
     };
   },
@@ -107,9 +110,15 @@ export default {
       });
     },
     gomyRecord() {
-      this.$router.push({
-        path: "myrecord"
-      });
+      if (this.myInfo.isAward) {
+        this.$router.push({
+          path: "record"
+        });
+      } else {
+        this.$router.push({
+          path: "myrecord"
+        });
+      }
     },
     gzclick() {
       this.gzshow = true;
@@ -121,7 +130,7 @@ export default {
             this.myInfo.dayBorder ? this.myInfo.dayBorder : 0
           }分`;
           this.rankText = `本日排名：${
-            this.myInfo.dayBorder ? this.myInfo.dayRanking : "无"
+            this.myInfo.dayRanking ? this.myInfo.dayRanking : "无"
           }名`;
           this.rankNum = this.myInfo.topFrewDay ? this.myInfo.topFrewDay : "**";
           this.ticketNum = this.myInfo.awardDay ? this.myInfo.awardDay : "**";
@@ -131,7 +140,7 @@ export default {
             this.myInfo.weekBorder ? this.myInfo.weekBorder : 0
           }分`;
           this.rankText = `本周排名：${
-            this.myInfo.weekRanking ? this.myInfo.weekRanking : '无'
+            this.myInfo.weekRanking ? this.myInfo.weekRanking : "无"
           }名`;
           this.rankNum = this.myInfo.topFrewWeek
             ? this.myInfo.topFrewWeek
@@ -143,7 +152,7 @@ export default {
             this.myInfo.allBorder ? this.myInfo.allBorder : 0
           }分`;
           this.rankText = `总排名：${
-            this.myInfo.allRanking ? this.myInfo.allRanking : '无'
+            this.myInfo.allRanking ? this.myInfo.allRanking : "无"
           }名`;
           this.rankNum = "**";
           this.ticketNum = "**";
@@ -160,7 +169,7 @@ export default {
         }
       });
     },
-    imgPre(src){
+    imgPre(src) {
       ImagePreview([src]);
     }
   },
@@ -195,7 +204,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      img{
+      img {
         width: 20px;
         height: 26px;
       }
@@ -352,9 +361,15 @@ export default {
     right: 0;
     top: 60%;
     transform: translateY(-50%);
-    background: url(../assets/img/rankno.png) no-repeat center center;
-    background-size: 100% 100%;
     cursor: pointer;
+    &.rankyes {
+      background: url(../assets/img/rankres.png) no-repeat center center;
+      background-size: 100% 100%;
+    }
+    &.rankno {
+      background: url(../assets/img/rankno.png) no-repeat center center;
+      background-size: 100% 100%;
+    }
   }
   .gz-dialog {
     width: 92%;

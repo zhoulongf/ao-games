@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       activeIndex: 0,
+      status:null,
       list: [],
       allList:[]
     };
@@ -77,6 +78,7 @@ export default {
     }
   },
   mounted(){
+    this.status = this.$route.query.status
     this.getData()
   }
 };
