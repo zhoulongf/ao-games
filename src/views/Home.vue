@@ -190,7 +190,7 @@ export default {
 </script>
 <style lang="scss">
 .vantdia {
-  background: #ccc;
+  background: #313C3D;
 }
 .jsutAlert {
   .van-dialog__message {

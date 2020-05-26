@@ -130,8 +130,8 @@ export default {
             this.myInfo.dayBorder ? this.myInfo.dayBorder : 0
           }分`;
           this.rankText = `本日排名：${
-            this.myInfo.dayRanking ? this.myInfo.dayRanking : "无"
-          }名`;
+            this.myInfo.dayRanking ? this.myInfo.dayRanking + '名' : "无"
+          }`;
           this.rankNum = this.myInfo.topFrewDay ? this.myInfo.topFrewDay : "**";
           this.ticketNum = this.myInfo.awardDay ? this.myInfo.awardDay : "**";
           break;
@@ -140,8 +140,8 @@ export default {
             this.myInfo.weekBorder ? this.myInfo.weekBorder : 0
           }分`;
           this.rankText = `本周排名：${
-            this.myInfo.weekRanking ? this.myInfo.weekRanking : "无"
-          }名`;
+            this.myInfo.weekRanking ? this.myInfo.weekRanking + '名' : "无"
+          }`;
           this.rankNum = this.myInfo.topFrewWeek
             ? this.myInfo.topFrewWeek
             : "**";
@@ -152,8 +152,8 @@ export default {
             this.myInfo.allBorder ? this.myInfo.allBorder : 0
           }分`;
           this.rankText = `总排名：${
-            this.myInfo.allRanking ? this.myInfo.allRanking : "无"
-          }名`;
+            this.myInfo.allRanking ? this.myInfo.allRanking + '名' : "无"
+          }`;
           this.rankNum = "**";
           this.ticketNum = "**";
           break;

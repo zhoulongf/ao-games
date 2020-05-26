@@ -243,7 +243,7 @@ export default {
   }
 }
 .vantdia {
-  background: rgba(0, 0, 0, 0.7);
+  background: #313C3D;
 }
 </style>
 <style lang="scss" scoped>
