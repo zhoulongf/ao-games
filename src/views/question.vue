@@ -26,7 +26,7 @@
 import { getQuestionList } from "@/api/index.js";
 import { shartMessage } from "@/utils/shar.js";
 import Vue from "vue";
-const lodash = require('lodash')
+const lodash = require("lodash");
 import { Toast } from "vant";
 Vue.use(Toast);
 export default {
@@ -59,11 +59,12 @@ export default {
         return false;
       }
     },
-    prex:lodash.debounce(function(key){
+    prex: lodash.debounce(function(key) {
       // if (!this.result) {
       //   Toast("请先选题");
       //   return false;
       // }
+      this.imgSrc = null;
       if (key == 2) {
         if (this.pageNum < this.list.length - 1) {
           this.pageNum++;
@@ -81,15 +82,16 @@ export default {
           return false;
         }
       }
-          this.titles = this.list[this.pageNum].body;
+      this.$nextTick(() => {
+        this.titles = this.list[this.pageNum].body;
         this.imgSrc = this.list[this.pageNum].bodyPic;
         this.questions = this.list[this.pageNum].questions;
         this.correct = this.list[this.pageNum].result;
         this.corrStatus = false;
         this.onceClick = false;
         this.result = null;
-      // });
-    },300)
+      });
+    }, 500)
   },
   mounted() {
     getQuestionList().then(res => {
@@ -114,7 +116,7 @@ export default {
   .centers {
     text-align: center;
   }
-  .titles{
+  .titles {
     display: flex;
     justify-content: center;
   }
