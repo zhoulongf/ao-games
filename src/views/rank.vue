@@ -189,7 +189,7 @@ export default {
   flex-direction: column;
   position: relative;
   &-list {
-    margin-right: 6px;
+    margin-right: 00px;
     display: flex;
     justify-content: space-around;
     border-bottom: 4px solid #b0dbdd;
@@ -359,7 +359,7 @@ export default {
     width: 60px;
     height: 40px;
     right: 0;
-    top: 60%;
+    top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     &.rankyes {

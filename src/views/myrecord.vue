@@ -36,8 +36,8 @@
         <div class="dialong-content">
           <div class="dialong-content-item" v-for="(item,index) in conversion" :key="index">
             <p class="duih">兑换码 {{item}}</p>
-            <div class="fubtn" :data-clipboard-text="conversion" @click="fuzhi">
-              <img src="../assets/img/fuzhi1.png" :data-clipboard-text="conversion" @click="fuzhi" />
+            <div class="fubtn">
+              <img src="../assets/img/fuzhi1.png" v-clipboard:copy="item" v-clipboard:success="fuzhi" />
             </div>
           </div>
           <p class="title" @click="lookPiao">点击查看领取流程</p>
@@ -94,7 +94,7 @@
 import { getMyAwardList, getPhoneCode, getAward } from "@/api/index.js";
 import Vue from "vue";
 import { Dialog, Toast, Form, Field, Button, Overlay,ImagePreview } from "vant";
-import Clipboard from "clipboard";
+import VueClipboard from "vue-clipboard2";
 import { shartMessage } from "@/utils/shar.js";
 Vue.use(Dialog)
   .use(Toast)
@@ -102,7 +102,8 @@ Vue.use(Dialog)
   .use(Field)
   .use(Button)
   .use(Overlay)
-  .use(ImagePreview);
+  .use(ImagePreview)
+  .use(VueClipboard);
 export default {
   name: "record",
   mixins: [shartMessage],
